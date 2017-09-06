@@ -9,7 +9,7 @@
 pacman -Syu
 
 #-Installing necessary stuff 
-pacman -S sudo htop git pkgfile base-devel tmux
+pacman -S sudo htop git pkgfile base-devel tmux samba openvpn pptpclient nmon
 
 #-Adding alarm to the sudoers users (https://stackoverflow.com/questions/12736351/exit-save-edit-to-sudoers-file-putty-ssh)
 
@@ -35,5 +35,5 @@ echo "UUID=eebde59c-f5ea-45bb-8671-71e1d4468094 /media/HDD1000G ext4 noatime,nof
 mount -a ext4
 
 #-Adding other stuff
-yaourt -S samba
+yaourt -S xfce4 xfce4-goodies
 yaourt -S nginx
