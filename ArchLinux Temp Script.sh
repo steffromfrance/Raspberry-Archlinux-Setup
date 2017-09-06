@@ -40,6 +40,7 @@ yaourt -S nginx
 
 #-Settings US Samba
 sudo systemctl stop samba
-
+sudo smbpasswd -a alarm
+sudo smbpasswd -a pi
 sudo systemctl enable samba
 sudo systemctl start samba
