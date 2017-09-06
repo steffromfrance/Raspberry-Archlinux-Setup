@@ -29,6 +29,11 @@ cd yaourt
 makepkg -si
 cd ..
 
+#-Mounting my External Hard Drive
+ mkdir -p /media/HDD1000G
+echo "UUID=eebde59c-f5ea-45bb-8671-71e1d4468094 /media/HDD1000G ext4 noatime,nofail 0 0" >> /etc/fstab
+mount -a ext4
+
 #-Adding other stuff
 yaourt -S samba
 yaourt -S nginx
