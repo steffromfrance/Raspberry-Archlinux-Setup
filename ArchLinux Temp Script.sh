@@ -37,3 +37,9 @@ mount -a ext4
 #-Adding other stuff
 yaourt -S xfce4 xfce4-goodies
 yaourt -S nginx
+
+#-Settings US Samba
+sudo systemctl stop samba
+
+sudo systemctl enable samba
+sudo systemctl start samba
