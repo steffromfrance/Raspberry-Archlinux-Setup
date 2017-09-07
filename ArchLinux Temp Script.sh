@@ -30,9 +30,12 @@ makepkg -si
 cd ..
 
 #-Mounting my External Hard Drive
- mkdir -p /media/HDD1000G
+mkdir -p /media/HDD1000G
 echo "UUID=eebde59c-f5ea-45bb-8671-71e1d4468094 /media/HDD1000G ext4 noatime,nofail 0 0" >> /etc/fstab
 mount -a ext4
+sudo chown alarm:alarm -Rv /media/HDD1000G
+sudo chmod 550 -Rv /media/HDD1000G
+
 
 #-Adding other stuff
 yaourt -S xfce4 xfce4-goodies
@@ -42,5 +45,13 @@ yaourt -S nginx
 sudo systemctl stop samba
 sudo smbpasswd -a alarm
 sudo smbpasswd -a pi
+cd /etc/samba
+sudo rm smb.conf && sudo rm smbusers.conf
+wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/smb.conf
+wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/smbusers.conf
+
+
+
+
 sudo systemctl enable samba
 sudo systemctl start samba
