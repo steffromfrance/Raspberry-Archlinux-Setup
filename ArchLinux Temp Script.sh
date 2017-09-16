@@ -9,7 +9,7 @@
 pacman -Syu
 
 #-Installing necessary stuff 
-pacman -S sudo htop git pkgfile base-devel tmux samba openvpn pptpclient nmon
+pacman -S sudo htop git pkgfile base-devel tmux samba openvpn pptpclient nmon wget
 
 #-Adding alarm to the sudoers users (https://stackoverflow.com/questions/12736351/exit-save-edit-to-sudoers-file-putty-ssh)
 
@@ -41,17 +41,12 @@ sudo chmod 550 -Rv /media/HDD1000G
 yaourt -S xfce4 xfce4-goodies
 yaourt -S nginx
 
-#-Settings US Samba
-sudo systemctl stop samba
-sudo smbpasswd -a alarm
-sudo smbpasswd -a pi
+#-Settings Samba
 cd /etc/samba
-sudo rm smb.conf && sudo rm smbusers.conf
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/smb.conf
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/smbusers.conf
-
-
-
-
-sudo systemctl enable samba
-sudo systemctl start samba
+rm smb.conf && rm smbusers
+wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/samba/smb.conf
+wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/samba/smbusers
+systemctl enable smbd && systemctl start smbd
+systemctl enable nmbd && systemctl start nmbd
+smbpasswd -a alarm
+smbpasswd -a pi
