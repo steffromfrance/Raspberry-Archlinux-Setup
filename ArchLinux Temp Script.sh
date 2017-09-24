@@ -50,3 +50,7 @@ systemctl enable smbd && systemctl start smbd
 systemctl enable nmbd && systemctl start nmbd
 smbpasswd -a alarm
 smbpasswd -a pi
+
+#-Installing Gateone
+yaourt gateone
+sudo gateone
