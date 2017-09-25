@@ -54,3 +54,6 @@ smbpasswd -a pi
 #-Installing Gateone
 yaourt gateone
 sudo gateone
+sudo killall gateone
+
+VERIF COMMIIITTT MAINTENANNNT
