@@ -56,4 +56,4 @@ yaourt gateone
 sudo gateone
 sudo killall gateone
 
-VERIF COMMIIITTT MAINTENANNNT  !!!! pourquoi ca remonte pas !!!!! depuis atom bordel  !!!!! !!!!!!! !!!!!!!
+VERIF COMMIIITTT MAINTENANNNT  !!!! pourquoi ca remonte pas !!!!! depuis atom bordel  !!!!! !!!!!!! !!!!!!! MEME SANS FAIRE LE COMMIT !!!
