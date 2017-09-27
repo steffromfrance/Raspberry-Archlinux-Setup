@@ -39,7 +39,6 @@ sudo chmod 550 -Rv /media/HDD1000G
 
 #-Adding other stuff
 yaourt -S xfce4 xfce4-goodies
-yaourt -S nginx
 
 #-Settings Samba
 cd /etc/samba
@@ -51,9 +50,9 @@ systemctl enable nmbd && systemctl start nmbd
 smbpasswd -a alarm
 smbpasswd -a pi
 
-#-Installing Gateone
-yaourt gateone
-sudo gateone
-sudo killall gateone
+#-Installing Shellinabox
+yaourt shellinabox-git
+systemctl enable shellinabox-git && systemctl start shellinabox-git
 
-VERIF COMMIIITTT MAINTENANNNT  !!!! pourquoi ca remonte pas !!!!! depuis atom bordel  !!!!! !!!!!!! !!!!!!! MEME SANS FAIRE LE COMMIT !!!
+#-Installing Nginx and setting up reverse proxy
+yaourt -S nginx
