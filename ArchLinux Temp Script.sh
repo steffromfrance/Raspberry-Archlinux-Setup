@@ -56,3 +56,6 @@ systemctl enable shellinabox-git && systemctl start shellinabox-git
 
 #-Installing Nginx and setting up reverse proxy
 yaourt -S nginx
+
+#-Generating and installing self-signed certificate
+# https://wiki.archlinux.org/index.php/Nginx#TLS.2FSSL
