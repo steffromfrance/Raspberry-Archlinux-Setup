@@ -59,10 +59,14 @@ yaourt -S nginx
 
 #-Generating and installing self-signed certificate
 # https://wiki.archlinux.org/index.php/Nginx#TLS.2FSSL
+cd /etc/nginx
+rm nginx.conf
+wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/nginx.conf
 mkdir /etc/nginx/ssl
 cd /etc/nginx/ssl
 openssl req -new -x509 -nodes -newkey rsa:4096 -keyout server.key -out server.crt -days 1095
 chmod 400 server.key
 chmod 444 server.crt
-rm nginx.conf
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/nginx.conf
+wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/ssl/server.crt
+wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/ssl/server.key
+systemctl restart nginx
