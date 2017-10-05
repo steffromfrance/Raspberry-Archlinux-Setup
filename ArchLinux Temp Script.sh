@@ -83,3 +83,16 @@ cd /usr/share/nginx/html/
 wget https://www.ezservermonitor.com/esm-web/downloads/version/2.5
 unzip -o -d ./ 2.5
 rm 2.5
+
+#-INstalling and configuring transmission
+# https://wiki.archlinux.org/index.php/Transmission
+yaourt transmission-cli
+yaourt transmission-remote-cli-git
+yaourt python2-geoip
+yaourt adns-python
+sudo systemctl enable transmission
+sudo systemctl start transmission
+sudo systemctl stop transmission
+cd /var/lib/transmission/.config/transmission-daemon
+rm settings.json
+wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/var/lib/transmission/.config/transmission-daemon/settings.json
