@@ -9,7 +9,7 @@
 pacman -Syu
 
 #-Installing necessary stuff
-pacman -S sudo htop git pkgfile base-devel tmux samba openvpn pptpclient nmon wget
+pacman -S sudo htop git pkgfile base-devel tmux samba openvpn pptpclient nmon wget unzip
 
 #-Adding alarm to the sudoers users (https://stackoverflow.com/questions/12736351/exit-save-edit-to-sudoers-file-putty-ssh)
 
@@ -76,3 +76,10 @@ chmod 444 server.crt
 wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/ssl/server.crt
 wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/ssl/server.key
 systemctl restart nginx
+
+#-Installin ezServerMonitor
+sudo -i
+cd /usr/share/nginx/html/
+wget https://www.ezservermonitor.com/esm-web/downloads/version/2.5
+unzip -o -d ./ 2.5
+rm 2.5
