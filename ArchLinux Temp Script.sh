@@ -29,6 +29,12 @@ cd yaourt
 makepkg -si
 cd ..
 
+#-Enabling ssh root login
+#-https://askubuntu.com/questions/469143/how-to-enable-ssh-root-access-on-ubuntu-14-04#489034
+sudo passwd
+
+
+
 #-Mounting my External Hard Drive
 mkdir -p /media/HDD1000G
 echo "UUID=eebde59c-f5ea-45bb-8671-71e1d4468094 /media/HDD1000G ext4 noatime,nofail 0 0" >> /etc/fstab
