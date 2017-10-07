@@ -40,7 +40,7 @@ mkdir -p /media/HDD1000G
 echo "UUID=eebde59c-f5ea-45bb-8671-71e1d4468094 /media/HDD1000G ext4 noatime,nofail 0 0" >> /etc/fstab
 mount -a ext4
 sudo chown alarm:alarm -Rv /media/HDD1000G
-sudo chmod 550 -Rv /media/HDD1000G
+sudo chmod 770 -Rv /media/HDD1000G
 
 
 #-Adding other stuff
@@ -84,15 +84,20 @@ wget https://www.ezservermonitor.com/esm-web/downloads/version/2.5
 unzip -o -d ./ 2.5
 rm 2.5
 
+
 #-INstalling and configuring transmission
 # https://wiki.archlinux.org/index.php/Transmission
 yaourt transmission-cli
 yaourt transmission-remote-cli-git
-yaourt python2-geoip
+yaourt python2-geoipq
 yaourt adns-python
 sudo systemctl enable transmission
 sudo systemctl start transmission
 sudo systemctl stop transmission
-cd /var/lib/transmission/.config/transmission-daemon
+#change user of the transmission-daemon to alarm
+sudo chown alarm:alarm -Rv /media/HDD1000G
+
+id transmission
+cd /home/alarm/.config/transmission-daemon
 rm settings.json
 wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/var/lib/transmission/.config/transmission-daemon/settings.json
