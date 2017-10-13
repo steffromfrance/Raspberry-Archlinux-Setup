@@ -96,3 +96,16 @@ sudo systemctl stop transmission
 cd /var/lib/transmission/.config/transmission-daemon
 rm settings.json
 wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/var/lib/transmission/.config/transmission-daemon/settings.json
+
+#-Installing LXDE
+# https://wiki.archlinux.org/index.php/LXDE
+sudo pacman -S lxde gvfs xarchiver
+
+#-Installing and configuring novnc
+#-https://github.com/novnc/noVNC
+git clone https://github.com/novnc/noVNC.git
+cd noVNC
+
+
+
+
