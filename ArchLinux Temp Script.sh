@@ -9,7 +9,7 @@
 pacman -Syu
 
 #-Installing necessary stuff
-pacman -S sudo htop git pkgfile base-devel tmux samba openvpn pptpclient nmon wget unzip
+pacman -S sudo htop git pkgfile base-devel tmux samba openvpn pptpclient nmon wget unzip zip zsh
 
 #-Adding alarm to the sudoers users (https://stackoverflow.com/questions/12736351/exit-save-edit-to-sudoers-file-putty-ssh)
 
@@ -100,6 +100,26 @@ wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master
 #-Installing LXDE
 # https://wiki.archlinux.org/index.php/LXDE
 sudo pacman -S lxde gvfs xarchiver
+
+#-Installing vncserver
+# https://wiki.archlinux.org/index.php/TigerVNC
+sudo pacman -S tigervnc
+vncserver
+vncserver -kill :1
+cd /home/alarm/.vnc
+rm xstartup
+wget  https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/home/alarm/.vnc/xstartup
+chmod u+x xstartup
+rm config
+https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/home/alarm/.vnc/config
+sudo loginctl enable-linger alarm
+systemctl --user enable vncserver@:1
+systemctl --user start vncserver@:1
+
+
+
+
+
 
 #-Installing and configuring novnc
 #-https://github.com/novnc/noVNC
