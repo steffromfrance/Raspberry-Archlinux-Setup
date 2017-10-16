@@ -116,11 +116,6 @@ sudo loginctl enable-linger alarm
 systemctl --user enable vncserver@:1
 systemctl --user start vncserver@:1
 
-
-
-
-
-
 #-Installing and configuring novnc
 #-https://github.com/novnc/noVNC
 git clone https://github.com/novnc/noVNC.git
