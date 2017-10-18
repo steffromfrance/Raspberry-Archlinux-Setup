@@ -122,5 +122,23 @@ git clone https://github.com/novnc/noVNC.git
 cd noVNC
 
 
+#-Installing and configuring my OpenVpn connection
+mkdir -p /var/log/openvpn/client
+cd /etc/openvpn/
+rm vpn-*.sh
+wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/vpn-down.sh
+wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/vpn-up.sh
+chmod u+x vpn-*.sh
+cd /etc/openvpn/client
+rm monitor-openvpn-connection.sh
+wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/client/monitor-openvpn-connection.sh
+chmod u+x monitor-openvpn-connection.sh
+wget https://s3-us-west-1.amazonaws.com/heartbleed/linux/linux-files.zip
+cp Linux\ OpenVPN\ Updated\ files/ca.crt ./ca.crt
+cp Linux\ OpenVPN\ Updated\ files/Wdc.key ./Wdc.key
+nano auth.txt
+ln -sf Linux\ OpenVPN\ Updated\ files/TCP/Netherlands1-tcp.ovpn clien.conf
+monitor-openvpn-connection.sh
+
 
 
