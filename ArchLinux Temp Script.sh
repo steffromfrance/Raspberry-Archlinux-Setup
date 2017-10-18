@@ -123,6 +123,7 @@ cd noVNC
 
 
 #-Installing and configuring my OpenVpn connection
+# https://support.purevpn.com/linux-openvpn-command/
 mkdir -p /var/log/openvpn/client
 cd /etc/openvpn/
 rm vpn-*.sh
