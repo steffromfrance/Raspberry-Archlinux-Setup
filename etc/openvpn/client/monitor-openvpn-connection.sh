@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 # Simple Script to start and monitor an  OpenVpn Connection
 # Feel free to Fork, Edit, Optimize....
 # Usefull command to check the VPN connection
@@ -11,23 +11,24 @@ PUBLICIPTOHIDE="176.141."
 NBCONN=0
  
 # Helper to direcly log message to console and log file
-function log{
+function log 
+{
   #TODO : see if we can optimize this function
-  LOGDIRECTORY=/var/log/openvpn/client
   LOGFILE="/var/log/openvpn/client-$(date +%Y-%m).log"
   STRLINE="$(date "+%a %b %d %H:%M:%S %Y ") $1"
-  echo $STRLINE & echo $STRLINE >> $LOGFILE
-  chmod 666 $LOGFILE
+  echo "$STRLINE" & echo "$STRLINE" >> "$LOGFILE"
+  chmod 666 "$LOGFILE"
  }
  
 # Function that start the OpenVpn Connection
-function startconn{
+function startconn 
+{
  let NBCONN++
  STR="OPENVPN CONNECTION Started at $(date +%Y-%m-%d-%k-%M-%S)"
  log "$STR"
  log "NUMBER OF (RE)-CONNECTION : $NBCONN (since start of the script)"
  #openvpn --config /etc/openvpn/client/client.conf --daemon --ca /etc/openvpn/client/ca.crt --tls-auth /etc/openvpn/client/Wdc.key --auth-user-pass /etc/openvpn/client
- openvpn --daemon --config /etc/openvpn/client/client.conf --ca /etc/openvpn/client/ca.crt --tls-auth /etc/openvpn/client/Wdc.key --auth-user-pass /etc/openvpn/client/auth.txt --script-security 2 --route-up "/bin/sh /etc/openvpn/vpn-up.sh" --down "/bin/sh /etc/openvpn/vpn-down.sh" --verb 3  --log-append $LOGFILE --mute 5
+ openvpn --daemon --config /etc/openvpn/client/client.conf --ca /etc/openvpn/client/ca.crt --tls-auth /etc/openvpn/client/Wdc.key --auth-user-pass /etc/openvpn/client/auth.txt --script-security 2 --route-up "/bin/sh /etc/openvpn/vpn-up.sh" --down "/bin/sh /etc/openvpn/vpn-down.sh" --verb 3  --log-append "$LOGFILE" --mute 5
 }
  
 #function that stop all the OpenVpn Connection
@@ -75,14 +76,14 @@ function checkvpnok
   RETURNVALUE=2
   EXTERNALIP=$(dig +short myip.opendns.com @resolver2.opendns.com)
   #log "IPTOHIDE=[$PUBLICIPTOHIDE] CURRENT PUBLIC=[$EXTERNALIP]"
-  if [ -z $EXTERNALIP ]
+  if [ -z "$EXTERNALIP" ]
   then
     RETURNVALUE=1
     log "CHECKVPNOK : ERROR  (not able to get external IP )"
     return $RETURNVALUE
   fi
  
-  is_substring $EXTERNALIP $PUBLICIPTOHIDE
+  is_substring "$EXTERNALIP" "$PUBLICIPTOHIDE"
   IPFOUND=$?
  
   #echo "DEBUG-IPFOUND=[$IPFOUND]"
