@@ -9,7 +9,7 @@
 pacman -Syu
 
 #-Installing necessary stuff
-pacman -S sudo htop git pkgfile base-devel tmux samba openvpn pptpclient nmon wget unzip zip zsh
+pacman -S sudo htop git pkgfile base-devel tmux samba openvpn pptpclient nmon wget unzip zip zsh dnsutils
 
 #-Adding alarm to the sudoers users (https://stackoverflow.com/questions/12736351/exit-save-edit-to-sudoers-file-putty-ssh)
 
