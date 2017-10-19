@@ -120,6 +120,7 @@ systemctl --user start vncserver@:1
 #-https://github.com/novnc/noVNC
 git clone https://github.com/novnc/noVNC.git
 cd noVNC
+./utils/launch.sh --vnc localhost:5901
 
 
 #-Installing and configuring my OpenVpn connection
