@@ -132,9 +132,10 @@ wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master
 wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/vpn-up.sh
 chmod u+x vpn-*.sh
 cd /etc/openvpn/client
-rm monitor-openvpn-connection.sh 
+rm *.sh 
 wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/client/monitor-openvpn-connection.sh 
-chmod u+x monitor-openvpn-connection.sh
+wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/client/start-purevpn.sh
+chmod u+x *.sh
 wget https://s3-us-west-1.amazonaws.com/heartbleed/linux/linux-files.zip
 cp Linux\ OpenVPN\ Updated\ files/ca.crt ./ca.crt
 cp Linux\ OpenVPN\ Updated\ files/Wdc.key ./Wdc.key
