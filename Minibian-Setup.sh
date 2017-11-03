@@ -8,7 +8,8 @@
 #-Installing necessary stuff
 apt-get update
 apt-get dist-upgrade
-apt-get install sudo htop git pkgfile base-devel tmux openvpn pptpclient wget unzip zip zsh dnsutils nmon nano raspiconfig cifs-utils
+apt-get install sudo htop git pkgfile base-devel tmux openvpn pptpclient wget unzip zip zsh 
+apt-get install dnsutils nmon nano raspiconfig cifs-utils traceroute 
 
 #-Creating user
 sudo adduser pi
@@ -30,6 +31,18 @@ sudo shutdown -r now
 #-Enabling ssh root login
 #-https://askubuntu.com/questions/469143/how-to-enable-ssh-root-access-on-ubuntu-14-04#489034
 sudo passwd
+
+#-Defining an Static IP Adress
+# https://www.howtogeek.com/howto/ubuntu/change-ubuntu-server-from-dhcp-to-a-static-ip-address/
+nano /etc/network/interfaces
+auto eth0
+iface eth0 inet static
+address 192.168.0.20
+netmask 255.255.255.0
+network 192.168.0.0
+broadcast 192.168.0.255
+gateway 192.168.0.1
+dns-nameservers 192.168.0.1
 
 
 #-Mounting my External Hard Drive
