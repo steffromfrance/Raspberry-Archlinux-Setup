@@ -8,14 +8,22 @@
 
 #-Installing necessary stuff
 apt-get update
-aptget install sudo htop git pkgfile base-devel tmux samba openvpn pptpclient nmon wget unzip zip zsh dnsutils
+apt-get dist-upgrade
+apt-get install sudo htop git pkgfile base-devel tmux openvpn pptpclient wget unzip zip zsh dnsutils nmon
 
 
 #-Creating user alarm
-
-
-
+sudo adduser alarm
 #-Adding alarm to the sudoers users (https://stackoverflow.com/questions/12736351/exit-save-edit-to-sudoers-file-putty-ssh)
+visudo
+#Navigate to the place you wish to edit using the up and down arrow keys.
+#Press insert to go into editing mode.
+#Make your changes - for example: user ALL=(ALL) ALL.
+#Note - it matters whether you use tabs or spaces when making changes.
+#Once your changes are done press esc to exit editing mode.
+#Now type :wq to save and press enter.
+
+
 
 #-Generating locale
 sudo nano /etc/locale.gen
