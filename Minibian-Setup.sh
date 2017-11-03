@@ -9,7 +9,7 @@
 #-Installing necessary stuff
 apt-get update
 apt-get dist-upgrade
-apt-get install sudo htop git pkgfile base-devel tmux openvpn pptpclient wget unzip zip zsh dnsutils nmon
+apt-get install sudo htop git pkgfile base-devel tmux openvpn pptpclient wget unzip zip zsh dnsutils nmon nano raspiconfig
 
 
 #-Creating user alarm
