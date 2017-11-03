@@ -5,15 +5,13 @@
 #-Burn It to the SD card using DD
 #-Default user is root : raspberry
 
-
 #-Installing necessary stuff
 apt-get update
 apt-get dist-upgrade
-apt-get install sudo htop git pkgfile base-devel tmux openvpn pptpclient wget unzip zip zsh dnsutils nmon nano raspiconfig
+apt-get install sudo htop git pkgfile base-devel tmux openvpn pptpclient wget unzip zip zsh dnsutils nmon nano raspiconfig cifs-utils
 
-
-#-Creating user alarm
-sudo adduser alarm
+#-Creating user
+sudo adduser pi
 #-Adding alarm to the sudoers users (https://stackoverflow.com/questions/12736351/exit-save-edit-to-sudoers-file-putty-ssh)
 visudo
 #Navigate to the place you wish to edit using the up and down arrow keys.
@@ -23,40 +21,26 @@ visudo
 #Once your changes are done press esc to exit editing mode.
 #Now type :wq to save and press enter.
 
-
-
 #-Generating locale
 sudo nano /etc/locale.gen
 sudo locale-gen
 sudo nano /etc/locale.conf  (set LANG = fr_FR.UTF-8 or other)
 sudo shutdown -r now
 
-#-Building yaourt (https://archlinux.fr/yaourt-en) AS standard user (not root)
-git clone https://aur.archlinux.org/package-query.git
-cd package-query
-makepkg -si
-cd ..
-git clone https://aur.archlinux.org/yaourt.git
-cd yaourt
-makepkg -si
-cd ..
-
 #-Enabling ssh root login
 #-https://askubuntu.com/questions/469143/how-to-enable-ssh-root-access-on-ubuntu-14-04#489034
 sudo passwd
 
 
-
 #-Mounting my External Hard Drive
+#-https://wiki.ubuntu.com/MountWindowsSharesPermanently
 mkdir -p /media/HDD1000G
-echo "UUID=eebde59c-f5ea-45bb-8671-71e1d4468094 /media/HDD1000G ext4 noatime,nofail 0 0" >> /etc/fstab
-mount -a ext4
-sudo chown alarm:alarm -Rv /media/HDD1000G
-sudo chmod 550 -Rv /media/HDD1000G
+echo -e 'username=msusername\npassword=mspassword\n' > ~/.smbcredentials
+chmod 600 ~/.smbcredentials
+echo '//192.168.0.10/HDD1000G /media/HDD1000G cifs credentials=/root/.smbcredentials,iocharset=utf8,sec=ntlm 0 0 ' >> /etc/fstab
+mount -a -v
 
 
-#-Adding other stuff
-yaourt -S xfce4 xfce4-goodies
 
 #-Settings Samba
 cd /etc/samba
