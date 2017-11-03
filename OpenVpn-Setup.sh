@@ -1,6 +1,9 @@
 #! /bin/sh
 #-Installing and configuring my OpenVpn connection
 # https://support.purevpn.com/linux-openvpn-command/
+#watch -n 10 'dig +short myip.opendns.com @resolver2.opendns.com'
+watch -n 10 'dig +short myip.opendns.com @resolver2.opendns.com'
+
 mkdir -p /var/log/openvpn/client
 mkdir -p /etc/openvpn/client
 cd /etc/openvpn/
