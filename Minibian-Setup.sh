@@ -8,8 +8,8 @@
 #-Installing necessary stuff
 apt-get update
 apt-get dist-upgrade
-apt-get install sudo htop git pkgfile base-devel tmux openvpn pptpclient wget unzip zip zsh 
-apt-get install dnsutils nmon nano raspiconfig cifs-utils traceroute 
+apt-get install sudo htop git tmux openvpn wget unzip zip zsh 
+apt-get install dnsutils nmon nano raspi-config cifs-utils traceroute 
 
 #-Creating user
 sudo adduser pi
