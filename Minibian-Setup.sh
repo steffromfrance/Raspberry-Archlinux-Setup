@@ -7,9 +7,10 @@
 
 #-Installing necessary stuff
 apt-get update
+apt-get install raspi-config
 apt-get dist-upgrade
 apt-get install sudo htop git tmux openvpn wget unzip zip zsh 
-apt-get install dnsutils nmon nano raspi-config cifs-utils traceroute 
+apt-get install dnsutils nmon nano cifs-utils traceroute 
 
 #-Creating user
 sudo adduser pi
