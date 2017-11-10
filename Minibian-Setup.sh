@@ -47,6 +47,13 @@ dns-nameservers 192.168.0.1
 
 
 #-Mounting my External Hard Drive
+mkdir -p /media/HDD1000G
+echo "UUID=eebde59c-f5ea-45bb-8671-71e1d4468094 /media/HDD1000G ext4 noatime,nofail 0 0" >> /etc/fstab
+mount -a ext4
+sudo chown pi:pi -Rv /media/HDD1000G
+sudo chmod 660 -Rv /media/HDD1000G
+
+#-Mounting a samba shared drive 
 #-https://wiki.ubuntu.com/MountWindowsSharesPermanently
 mkdir -p /media/HDD1000G
 echo -e 'username=msusername\npassword=mspassword\n' > ~/.smbcredentials
