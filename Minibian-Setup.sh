@@ -7,9 +7,9 @@
 
 #-Installing necessary stuff
 apt-get update
-apt-get install raspi-config
+apt-get install raspi-config tmux
 apt-get dist-upgrade
-apt-get install sudo htop git tmux openvpn wget unzip zip zsh 
+apt-get install sudo htop git openvpn wget unzip zip zsh 
 apt-get install dnsutils nmon nano cifs-utils traceroute 
 
 #-Creating user
