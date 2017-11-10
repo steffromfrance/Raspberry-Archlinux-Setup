@@ -10,7 +10,7 @@ apt-get update
 apt-get install raspi-config tmux
 apt-get dist-upgrade
 apt-get install sudo htop git openvpn wget unzip zip zsh 
-apt-get install dnsutils nmon nano cifs-utils traceroute 
+apt-get install dnsutils nmon nano cifs-utils traceroute mc
 
 #-Creating user
 sudo adduser pi
