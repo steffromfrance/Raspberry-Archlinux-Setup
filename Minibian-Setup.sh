@@ -50,8 +50,8 @@ dns-nameservers 192.168.0.1
 mkdir -p /media/HDD1000G
 echo "UUID=eebde59c-f5ea-45bb-8671-71e1d4468094 /media/HDD1000G ext4 noatime,nofail 0 0" >> /etc/fstab
 mount -a ext4
-sudo chown pi:pi -Rv /media/HDD1000G
-sudo chmod 660 -Rv /media/HDD1000G
+sudo chown root:root -Rv /media/HDD1000G
+sudo chmod 666 -Rv /media/HDD1000G
 
 #-Mounting a samba shared drive 
 #-https://wiki.ubuntu.com/MountWindowsSharesPermanently
@@ -67,11 +67,9 @@ mount -a -v
 cd /etc/samba
 rm smb.conf && rm smbusers
 wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/samba/smb.conf
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/samba/smbusers
 systemctl enable smbd && systemctl start smbd
 systemctl enable nmbd && systemctl start nmbd
-smbpasswd -a alarm
-smbpasswd -a pi
+
 
 #-Installing Shellinabox
 yaourt shellinabox-git
@@ -116,20 +114,22 @@ wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master
 
 #-Installing LXDE
 # https://wiki.archlinux.org/index.php/LXDE
-sudo pacman -S lxde gvfs xarchiver
+apt-get install xfce4 xfce4-goodies
 
 #-Installing vncserver
-# https://wiki.archlinux.org/index.php/TigerVNC
-sudo pacman -S tigervnc
+#-Configuring the desktop https://support.realvnc.com/Knowledgebase/Article/View/345/0/
+apt-get install realvnc-vnc-server
 vncserver
 vncserver -kill :1
+
+
 cd /home/alarm/.vnc
 rm xstartup
 wget  https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/home/alarm/.vnc/xstartup
 chmod u+x xstartup
 rm config
 https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/home/alarm/.vnc/config
-sudo loginctl enable-linger alarm
+sudo loginctl enable-linger pi
 systemctl --user enable vncserver@:1
 systemctl --user start vncserver@:1
 
