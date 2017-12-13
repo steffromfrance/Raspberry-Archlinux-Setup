@@ -1,9 +1,12 @@
 #! /bin/sh
 # Simple script to store all the necessary steps to setup my Fedora ARM on my raspberry 1/2/3
 
-#-Get The image at https://minibianpi.wordpress.com
-#-Burn It to the SD card using DD
-#-Default user is root : raspberry
+#-Get The image at https://arm.fedoraproject.org/fr/
+#-Installing using installer
+dnf install fedora-arm-installer
+
+#-Following the step  https://fedoraproject.org/wiki/Architectures/ARM/Raspberry_Pi
+fedora-arm-image-installer --image=Fedora-Minimal-armhfp-27-1.6-sda.raw.xz --target=rpi2 --media=/dev/sdb1 --selinux=OFF --norootpass
 
 
 
@@ -11,6 +14,7 @@
 
 
 
+------------------------------------------------------------
 #-Installing necessary stuff
 apt-get update
 apt-get install raspi-config tmux
