@@ -81,6 +81,7 @@ systemctl enable nmbd && systemctl start nmbd
 nstalling WebMin
 wget http://prdownloads.sourceforge.net/webadmin/webmin_1.870_all.deb
 dpkg -i webmin_1.870_all.deb
+apt --fix-broken install 
 
 #-Installing Shellinabox
 yaourt shellinabox-git
