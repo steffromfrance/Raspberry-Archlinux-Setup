@@ -78,6 +78,9 @@ wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/sam
 systemctl enable smbd && systemctl start smbd
 systemctl enable nmbd && systemctl start nmbd
 
+nstalling WebMin
+wget http://prdownloads.sourceforge.net/webadmin/webmin_1.870_all.deb
+dpkg -i webmin_1.870_all.deb
 
 #-Installing Shellinabox
 yaourt shellinabox-git
