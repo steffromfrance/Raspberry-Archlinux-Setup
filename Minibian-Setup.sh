@@ -5,6 +5,10 @@
 #-Burn It to the SD card using DD
 #-Default user is root : raspberry
 
+#-Using Noob, need to enable ssh by creatin a ssh file on the root
+user: pi
+pass: raspberry
+
 #-Installing necessary stuff
 apt-get update
 apt-get install raspi-config tmux
