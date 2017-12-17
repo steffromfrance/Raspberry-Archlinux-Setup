@@ -14,7 +14,7 @@ apt-get update
 apt-get install raspi-config tmux
 apt-get dist-upgrade
 apt-get install sudo htop git openvpn wget unzip zip zsh 
-apt-get install dnsutils nmon nano cifs-utils traceroute mc
+apt-get install dnsutils nmon nano cifs-utils traceroute mc ncdu samba
 
 #-Creating user
 sudo adduser pi
@@ -48,13 +48,17 @@ network 192.168.0.0
 broadcast 192.168.0.255
 gateway 192.168.0.1
 dns-nameservers 192.168.0.1
+ifdown eth0 && ifup eth0
+
+# For static IP, consult /etc/dhcpcd.conf and 'man dhcpcd.conf'
+nano /etc/dhcpd.conf
 
 
 #-Mounting my External Hard Drive
 mkdir -p /media/HDD1000G
 echo "UUID=eebde59c-f5ea-45bb-8671-71e1d4468094 /media/HDD1000G ext4 noatime,nofail 0 0" >> /etc/fstab
 mount -a ext4
-sudo chown root:root -Rv /media/HDD1000G
+sudo chown pi:pi -Rv /media/HDD1000G
 sudo chmod 666 -Rv /media/HDD1000G
 
 #-Mounting a samba shared drive 
