@@ -28,7 +28,6 @@ overscan_bottom=10
 
 #-installing some stuff
 pkg install sudo
-
 pkg install htop git tmux samba openvpn wget unzip zip nano mc
 
 #-Creating user
@@ -48,16 +47,13 @@ visudo
 
 
 
-#-Defining an Static IP Adress
-# https://www.howtogeek.com/howto/ubuntu/change-ubuntu-server-from-dhcp-to-a-static-ip-address/
-nano /etc/network/interfaces
-auto eth0
-iface eth0 inet static
-address 192.168.0.20
-netmask 255.255.255.0
-network 192.168.0.0
-broadcast 192.168.0.255
-gateway 192.168.0.1
+#-Defining an Static IP Adress in FreeBSD
+# https://superuser.com/questions/151735/how-to-set-static-ip-address-on-the-freebsd-machine
+sysrc ifconfig_DEFAULT="inet 192.168.0.10 netmask 255.255.255.0 broadcast 192.168.0.255"
+sysrc defaultrouter="192.168.0.1"
+reboot now
+
+
 dns-nameservers 192.168.0.1
 
 
