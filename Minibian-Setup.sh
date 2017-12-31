@@ -6,12 +6,12 @@
 #-Default user is root : raspberry
 
 #-Using Noob, need to enable ssh by creatin a ssh file on the root
-user: pi
-pass: raspberry
+users: root/raspberry
 
 #-Installing necessary stuff
-apt-get update
 apt-get install raspi-config tmux
+#Expanding the user space to the entire sd card
+raspi-config
 apt-get dist-upgrade
 apt-get install sudo htop git openvpn wget unzip zip zsh 
 apt-get install dnsutils nmon nano cifs-utils traceroute mc ncdu samba
