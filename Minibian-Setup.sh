@@ -13,7 +13,7 @@ apt-get install raspi-config tmux
 #Expanding the user space to the entire sd card
 raspi-config
 apt-get dist-upgrade
-apt-get install sudo htop git openvpn wget unzip zip zsh 
+apt-get install sudo perl htop git openvpn wget unzip zip zsh 
 apt-get install dnsutils nmon nano cifs-utils traceroute mc ncdu samba
 
 #-Creating user
@@ -42,7 +42,7 @@ sudo passwd
 nano /etc/network/interfaces
 auto eth0
 iface eth0 inet static
-address 192.168.0.20
+address 192.168.0.10
 netmask 255.255.255.0
 network 192.168.0.0
 broadcast 192.168.0.255
@@ -78,7 +78,7 @@ wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/sam
 systemctl enable smbd && systemctl start smbd
 systemctl enable nmbd && systemctl start nmbd
 
-nstalling WebMin
+#-Installing WebMin
 wget http://prdownloads.sourceforge.net/webadmin/webmin_1.870_all.deb
 dpkg -i webmin_1.870_all.deb
 apt --fix-broken install 
