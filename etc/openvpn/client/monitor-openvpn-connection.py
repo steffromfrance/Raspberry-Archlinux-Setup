@@ -14,7 +14,13 @@ from json import load
 import os
 
 # the amount to wait between check in Minutes
-SleepTime = (1 * 60) / 20
+SleepTime = (1 * 60) / 20  # 3 sesonds
+SleepTime = (1 * 60) / 12  # 5 sesonds
+
+# Variable used to store Public IP information
+PublicIp = ""
+PublicCountryName = ""
+PublicCountryCode = ""
 
 
 # helper used to centralise log method
@@ -46,6 +52,15 @@ def getpubliccountry():
     return load(urlopen('http://freegeoip.net/json/'))['country_name']
 
 
+# Update current Public IP information
+def getpublicinfo():
+    global PublicIp, PublicCountryCode, PublicCountryName
+    PublicInfo = load(urlopen('http://freegeoip.net/json/'))
+    PublicCountryName = PublicInfo['country_name']
+    PublicCountryCode = PublicInfo['country_code']
+    PublicIp = PublicInfo['ip']
+
+
 # clear the current terminal
 def clearscreen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -54,11 +69,10 @@ def clearscreen():
 # display info
 def displayinfo():
     log("========================================================")
-
-    log("Public IP=[" + getpublicip() + "]")
-    log("Public Country Code=[" + getpubliccountrycode() + "]")
-    log("Public Country=[" + getpubliccountry() + "]")
-
+    getpublicinfo()
+    log("Public IP=[" + PublicIp + "]")
+    log("Public Country Code=[" + PublicCountryCode + "]")
+    log("Public Country=[" + PublicCountryName + "]")
     log("========================================================")
 
 
@@ -66,7 +80,8 @@ def displayinfo():
 clearscreen()
 log("Script start")
 
-# simple loop that wait for a keystroke interrupt it with the usual Ctrl-C (SIGINT).
+# simple loop that wait for a keystroke interrupt it with
+# the usual Ctrl-C (SIGINT).
 # https://stackoverflow.com/questions/13180941/how-to-kill-a-while-loop-with-a-keystroke
 try:
     while True:
