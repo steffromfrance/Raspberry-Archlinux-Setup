@@ -66,7 +66,7 @@ sudo chmod 666 -Rv /media/HDD1000G
 mkdir -p /media/HDD1000G
 echo -e 'username=msusername\npassword=mspassword\n' > ~/.smbcredentials
 chmod 600 ~/.smbcredentials
-echo '//192.168.0.10/HDD1000G /media/HDD1000G cifs credentials=/root/.smbcredentials,iocharset=utf8,sec=ntlm 0 0 ' >> /etc/fstab
+echo '//192.168.0.10/HDD1000G /media/HDD1000G cifs credentials=/root/.smbcredentials,nofail,iocharset=utf8,sec=ntlm 0 0 ' >> /etc/fstab
 mount -a -v
 
 
