@@ -15,12 +15,13 @@ import os
 from os import listdir
 from os.path import isfile, join
 import random
-import tempfile
+# import tempfile
+import sys
 
 
 # the amount to wait between check in Minutes
-SleepTime = (1 * 60) / 20  # 3 sesonds
-SleepTime = (1 * 60) / 12  # 5 sesonds
+SleepTime = (1 * 60) / 20  # 3 seconds
+SleepTime = (1 * 60) / 12  # 5 seconds
 TimeStart = datetime.datetime.now()
 NbConnect = 0
 
@@ -28,7 +29,13 @@ NbConnect = 0
 Ip = ""
 CB = ""
 CC = ""
-CCToHide = "FR"
+# Getting the first parameter representing the CountryCode to Hide
+# or setting it to FR if not defined
+if(2 <= len(sys.argv)):
+    CCToHide = sys.argv[1]
+else:
+    CCToHide = "FR"
+
 CCPath = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -91,6 +98,7 @@ def displayinfo():
     log("Check Interval (seconds)=[" + str(SleepTime) + "]")
     getpublicinfo()
     log("Public Info=[" + CB + "/" + CC + "/" + Ip + "]")
+    # log("Args : " + print(sys.argv) )
     log("CountryCodeToHide=[" + CCToHide + "]")
     log("========================================================")
 
@@ -110,8 +118,8 @@ def startconn():
 
     # Using a log file by week
     logfile = "/var/log/openvpn-client-"
-    logfile += datetime.now.isocalendar()[0] + "-"
-    logfile += datetime.now.isocalendar()[1] + ".log"
+    logfile += str(datetime.datetime.isocalendar(datetime.datetime.now())[0]) + "-"
+    logfile += str(datetime.datetime.isocalendar(datetime.datetime.now())[1]) + ".log"
     log("LogFile : " + logfile)
 
 
