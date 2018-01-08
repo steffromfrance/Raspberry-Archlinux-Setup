@@ -19,8 +19,8 @@ import tempfile
 
 
 # the amount to wait between check in Minutes
-SleepTime = (1 * 60) / 20  # 3 sesonds
-SleepTime = (1 * 60) / 12  # 5 sesonds
+SleepTime = (1 * 60) / 20  # 3 seconds
+SleepTime = (1 * 60) / 12  # 5 seconds
 TimeStart = datetime.datetime.now()
 NbConnect = 0
 
@@ -110,8 +110,8 @@ def startconn():
 
     # Using a log file by week
     logfile = "/var/log/openvpn-client-"
-    logfile += datetime.now.isocalendar()[0] + "-"
-    logfile += datetime.now.isocalendar()[1] + ".log"
+    logfile += datetime.datetime.isocalendar(datetime.datetime.now())[0] + "-"
+    logfile += datetime.datetime.isocalendar(datetime.datetime.now())[1] + ".log"
     log("LogFile : " + logfile)
 
 
