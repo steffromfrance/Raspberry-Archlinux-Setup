@@ -37,6 +37,7 @@ else:
     CCToHide = "FR"
 
 CCPath = os.path.dirname(os.path.realpath(__file__))
+LogFile = ""
 
 
 # helper used to centralise log method
@@ -93,6 +94,11 @@ def displayinfo():
     log("========================================================")
 # log("Script start=" + time.strftime("%Y-%m-%d %H:%M:%S", TimeStart))
     log("Current Path=[" + CCPath + "]")
+    # Using a log file by week
+    Logfile = "/var/log/openvpn-client-"
+    Logfile += str(datetime.datetime.isocalendar(datetime.datetime.now())[0]) + "-"
+    Logfile += str(datetime.datetime.isocalendar(datetime.datetime.now())[1]).zfill(2) + ".log"
+    log("LogFile : " + Logfile)
     log("Duration=" + str(round(getTimeDifferenceFromStart(), 4)) + " hours \
        Nb Disconnect=" + str(NbConnect))
     log("Check Interval (seconds)=[" + str(SleepTime) + "]")
@@ -116,11 +122,17 @@ def startconn():
     conffile = random.choice(f2)
     log("Using Config File : " + conffile)
 
-    # Using a log file by week
-    logfile = "/var/log/openvpn-client-"
-    logfile += str(datetime.datetime.isocalendar(datetime.datetime.now())[0]) + "-"
-    logfile += str(datetime.datetime.isocalendar(datetime.datetime.now())[1]) + ".log"
-    log("LogFile : " + logfile)
+    # Defining all the parameters to open the connection
+    # Using  SubProcess.Popen function https://docs.python.org/2/library/subprocess.html#subprocess.Popen
+    cmdExe = ""
+    openvpn - -daemon - -config / etc / openvpn / client / client.conf - -ca / etc / openvpn / client / ca.crt - -tls - auth / etc / openvpn / client / Wdc.key - -auth - user -
+    pass / etc / openvpn / client / auth.txt - -script - security
+    2 - -route - up
+    "/bin/sh /etc/openvpn/vpn-up.sh" - -down
+    "/bin/sh /etc/openvpn/vpn-down.sh" - -verb
+    3 - -log - append
+    "$LOGFILE" - -mute
+    5
 
 
 # Main start of the script
