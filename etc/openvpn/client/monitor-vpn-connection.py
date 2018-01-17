@@ -29,6 +29,14 @@ TimeStart = datetime.datetime.now()
 NbConnect = 0
 oPid = 0
 
+
+# Display a message usage
+def getHelp():
+    print("Start an monitor a VPN connection and watch if your current country is not exposed.")
+    print("Usage : monitor-vpn-connection.py COUNTRYCODE VPNTYPE VPNCONFIG ")
+
+    exit()
+
 # Variable used to store Public IP information and other Stuff
 Ip = ""
 CB = ""
@@ -38,7 +46,7 @@ CC = ""
 if(2 <= len(sys.argv)):
     CCToHide = sys.argv[1]
 else:
-    CCToHide = "FR"
+    getHelp()
 
 CCPath = os.path.dirname(os.path.realpath(__file__))
 LogFile = ""
