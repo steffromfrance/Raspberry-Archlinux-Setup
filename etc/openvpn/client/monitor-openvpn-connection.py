@@ -15,25 +15,37 @@ import os
 from os import listdir
 from os.path import isfile, join
 import random
-import tempfile
+# import tempfile
+import sys
+import subprocess
+from pathlib import Path
 
 
 # the amount to wait between check in Minutes
 SleepTime = (1 * 60) / 20  # 3 seconds
 SleepTime = (1 * 60) / 12  # 5 seconds
+SleepTime = (1 * 60) / 2  # 30 seconds
 TimeStart = datetime.datetime.now()
 NbConnect = 0
+oPid = 0
 
 # Variable used to store Public IP information and other Stuff
 Ip = ""
 CB = ""
 CC = ""
-CCToHide = "FR"
+# Getting the first parameter representing the CountryCode to Hide
+# or setting it to FR if not defined
+if(2 <= len(sys.argv)):
+    CCToHide = sys.argv[1]
+else:
+    CCToHide = "FR"
+
 CCPath = os.path.dirname(os.path.realpath(__file__))
+LogFile = ""
 
 
 # helper used to centralise log method
-def log(strline):
+def log(strline: object) -> object:
     print(formatedtime() + " : " + strline)
 
 
@@ -83,21 +95,28 @@ def getTimeDifferenceFromStart():
 
 # display info
 def displayinfo():
+    global LogFile
     log("========================================================")
 # log("Script start=" + time.strftime("%Y-%m-%d %H:%M:%S", TimeStart))
     log("Current Path=[" + CCPath + "]")
+    # Using a log file by week
+    LogFile = "/var/log/openvpn-client-"
+    LogFile += str(datetime.datetime.isocalendar(datetime.datetime.now())[0]) + "-"
+    LogFile += str(datetime.datetime.isocalendar(datetime.datetime.now())[1]).zfill(2) + ".log"
+    log("LogFile : " + LogFile)
     log("Duration=" + str(round(getTimeDifferenceFromStart(), 4)) + " hours \
        Nb Disconnect=" + str(NbConnect))
     log("Check Interval (seconds)=[" + str(SleepTime) + "]")
     getpublicinfo()
     log("Public Info=[" + CB + "/" + CC + "/" + Ip + "]")
+    # log("Args : " + print(sys.argv) )
     log("CountryCodeToHide=[" + CCToHide + "]")
     log("========================================================")
 
 
 # Starting a new OpenVpn Connection
 def startconn():
-    global NbConnect
+    global NbConnect, oPid
     NbConnect = NbConnect + 1
     log("Country Code NOT HIDDEN => Starting an new connection")
 
@@ -108,12 +127,45 @@ def startconn():
     conffile = random.choice(f2)
     log("Using Config File : " + conffile)
 
-    # Using a log file by week
-    logfile = "/var/log/openvpn-client-"
-    logfile += datetime.datetime.isocalendar(datetime.datetime.now())[0] + "-"
-    logfile += datetime.datetime.isocalendar(datetime.datetime.now())[1] + ".log"
-    log("LogFile : " + logfile)
+    # Checking if the log file does not exist
+    if os.path.isfile(LogFile) == False and False:
+        # file does not exist, creating the file with the good user right
+        with os.fdopen(os.open(LogFile, os.O_WRONLY | os.O_CREAT, 0o600), 'w') as handle:
+            handle.write('Init of the log file')
 
+    # Defining all the parameters to open the connection
+    # Using  SubProcess.Popen function https://docs.python.org/3/library/subprocess.html#subprocess.Popen
+
+    # args2 = ['sudo', 'openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
+    # args2 = ['/usr/sbin/openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
+    args2 = ['sudo', 'openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
+    args2.append('--config')
+    args2.append(CCPath + '/' + conffile)
+    args2.append('--ca')
+    args2.append(CCPath + '/' + 'ca.crt')
+    args2.append('--tls-auth')
+    args2.append(CCPath + '/' + 'Wdc.key')
+    args2.append('--auth-user-pass')
+    args2.append(CCPath + '/' + 'auth.txt')
+    args2.append('--log-append')
+    args2.append(LogFile)
+
+    # log("Args used to launch OpenVpn : " + str(args2))
+
+    openvpn_cmd = ['sudo', 'openvpn', '--config', 'client.cfg', '--auth-user-pass', 'hmaauth.conf']
+
+    # prog = subprocess.Popen(args2)
+    # exit(0)
+
+
+    oPid = subprocess.Popen(args2)
+    log("OpenVpn launched with return code: [" + str(oPid.returncode) + "]")
+    # exit()
+
+# Stopping any existing  OpenVpn Connection
+def stopconn():
+    argskill = ['sudo', 'killall', 'openvpn']
+    oPid = subprocess.Popen(argskill)
 
 # Main start of the script
 clearscreen()
@@ -123,11 +175,14 @@ log("Script start")
 # the usual Ctrl-C (SIGINT).
 # https://stackoverflow.com/questions/13180941/how-to-kill-a-while-loop-with-a-keystroke
 try:
+    stopconn()
     while True:
         displayinfo()
         # If the country code is not hidden, restarting the connection
         if CC == CCToHide:
             startconn()
+            log("Sleeping 30 seconds before next check....")
+            time.sleep(30) # Sleeping for 30 sec
 
         time.sleep(SleepTime)
         clearscreen()
