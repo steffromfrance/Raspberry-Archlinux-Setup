@@ -32,9 +32,15 @@ oPid = 0
 
 # Display a message usage
 def getHelp():
-    print("Start an monitor a VPN connection and watch if your current country is not exposed.")
+    print('')
+    print("Start an monitor a existing VPN connection and watch if your current country is not exposed.")
     print("Usage : monitor-vpn-connection.py COUNTRYCODE VPNTYPE VPNCONFIG ")
-
+    print("        COUNTRYCODE : country code to hide (FR,GB,....)")
+    print("        VPNTYPE : OPENVPN or PPTP")
+    print("        VPNCONFIG : depending of the VPNTYPE used")
+    print("                    -subfolder containing the OPENVPN configuration files (*.ovpn) to use randomly")
+    print("                    -name of the PPTP connection name to use")
+    print('')
     exit()
 
 # Variable used to store Public IP information and other Stuff
