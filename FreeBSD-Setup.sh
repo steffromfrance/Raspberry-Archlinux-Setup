@@ -67,13 +67,7 @@ sudo chmod 666 -Rv /media/HDD1000G
 #-Mounting a samba shared drive on FreeBsd
 #-http://blog.up-link.ro/freebsd-how-to-mount-smb-cifs-shares-under-freebsd/
 mkdir -p /media/HDD1000G
-
-
-echo -e 'username=msusername\npassword=mspassword\n' > ~/.smbcredentials
-chmod 600 ~/.smbcredentials
-echo '//192.168.0.10/HDD1000G /media/HDD1000G cifs credentials=/root/.smbcredentials,iocharset=utf8,sec=ntlm 0 0 ' >> /etc/fstab
-mount -a -v
-
+mount_smbfs -O pi:pi -I 192.168.0.10 //pi@192.168.0.10/HDD1000G /media/HDD1000G
 
 
 #-Settings Samba
