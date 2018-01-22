@@ -1,0 +1,12 @@
+Location	           OpenVPN TCP	                            OpenVPN UDP
+Utah	               usut2-ovpn-tcp.pointtoserver.com	        usut2-ovpn-udp.pointtoserver.com
+San Francisco          ussf2-ovpn-tcp.pointtoserver.com	        ussf2-ovpn-udp.pointtoserver.com
+Illinois               usil2-ovpn-tcp.pointtoserver.com         usil2-ovpn-udp.pointtoserver.com
+Georgia                usga2-ovpn-tcp.pointtoserver.com	        usga2-ovpn-udp.pointtoserver.com
+Texas                  ustx2-ovpn-tcp.pointtoserver.com	        ustx2-ovpn-udp.pointtoserver.com
+New Jersey             usnj2-ovpn-tcp.pointtoserver.com	        usnj2-ovpn-udp.pointtoserver.com
+Phoenix                usphx2-ovpn-tcp.pointtoserver.com	    usphx2-ovpn-udp.pointtoserver.com
+New York               usny2-ovpn-tcp.pointtoserver.com	        usny2-ovpn-udp.pointtoserver.com
+Los Angeles            usla2-ovpn-tcp.pointtoserver.com	        usla2-ovpn-udp.pointtoserver.com
+Washington DC          uswdc2-ovpn-tcp.pointtoserver.com	    uswdc2-ovpn-udp.pointtoserver.com
+
