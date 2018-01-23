@@ -27,6 +27,7 @@ SleepTime = (1 * 60) / 12  # 5 seconds
 SleepTime = (1 * 60) / 2  # 30 seconds
 TimeStart = datetime.datetime.now()
 NbConnect = 0
+SubDir = ''
 oPid = 0
 
 
@@ -36,10 +37,10 @@ def getHelp():
     print("Start an monitor a existing VPN connection and watch if your current country is not exposed.")
     print("Usage : monitor-vpn-connection.py COUNTRYCODE VPNTYPE VPNCONFIG ")
     print("        COUNTRYCODE : country code to hide (FR,GB,....)")
-    print("        VPNTYPE : OPENVPN or PPTP")
+    # print("        VPNTYPE : OPENVPN or PPTP")
     print("        VPNCONFIG : depending of the VPNTYPE used")
     print("                    -subfolder containing the OPENVPN configuration files (*.ovpn) to use randomly")
-    print("                    -name of the PPTP connection name to use")
+    # print("                    -name of the PPTP connection name to use")
     print('')
     exit()
 
@@ -53,9 +54,14 @@ if(2 <= len(sys.argv)):
     CCToHide = sys.argv[1]
 else:
     getHelp()
+if(3 <= len(sys.argv)):
+    SubDir = sys.argv[2]
+else:
+    getHelp()
 
 CCPath = os.path.dirname(os.path.realpath(__file__))
-LogFile = ""
+CCPath = os.path.join(CCPath, SubDir)
+# LogFile = ""
 
 
 # helper used to centralise log method
@@ -153,20 +159,24 @@ def startconn():
     # args2 = ['sudo', 'openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
     # args2 = ['/usr/sbin/openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
     args2 = ['sudo', 'openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
-    args2.append('--config')
-    args2.append(CCPath + '/' + conffile)
+    args2.append('--cd')
+    args2.append(CCPath)
     args2.append('--ca')
-    args2.append(CCPath + '/' + 'ca.crt')
+    args2.append('ca.crt')
     args2.append('--tls-auth')
-    args2.append(CCPath + '/' + 'Wdc.key')
+    args2.append('Wdc.key')
     args2.append('--auth-user-pass')
-    args2.append(CCPath + '/' + 'auth.txt')
+    args2.append('auth.txt')
     args2.append('--log-append')
     args2.append(LogFile)
+    args2.append('--config')
+    args2.append(conffile)
 
-    # log("Args used to launch OpenVpn : " + str(args2))
+    s = " "
+    s.join(args2)
+    log("Args used to launch OpenVpn : " + s.join(args2))
 
-    openvpn_cmd = ['sudo', 'openvpn', '--config', 'client.cfg', '--auth-user-pass', 'hmaauth.conf']
+    # openvpn_cmd = ['sudo', 'openvpn', '--config', 'client.cfg', '--auth-user-pass', 'hmaauth.conf']
 
     # prog = subprocess.Popen(args2)
     # exit(0)
