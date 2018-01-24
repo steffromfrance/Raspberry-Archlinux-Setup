@@ -85,6 +85,11 @@ python -m ensurepip
 # Installing Glances
 # https://github.com/nicolargo/glances/blob/master/README.rst
 pip install glances
+# http://glances.readthedocs.io/en/stable/quickstart.html
+# launching Web Server Mode
+glances -w  # the type http://@server:61208
+glances --theme-white
+
 
 
 #-Installing Shellinabox
