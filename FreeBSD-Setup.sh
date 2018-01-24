@@ -27,8 +27,9 @@ overscan_bottom=10
 # Connect to SSH : freebsd/freebsd or root/root 
 
 #-installing some stuff
-pkg install sudo
-pkg install htop git tmux samba openvpn wget unzip zip nano mc
+pkg install sudo zsh
+pkg install htop git tmux openvpn wget unzip zip nano mc
+pkg install bind-tools
 
 #-Creating user
 adduser pi
@@ -42,7 +43,12 @@ visudo
 #Once your changes are done press esc to exit editing mode.
 #Now type :wq to save and press enter.
 
-
+# Loading the tun kermodule to allow openvpn conncetion
+# and resolve error openvpn[1264]: Cannot allocate TUN/TAP dev dynamically
+# ref : http://www.freebsddiary.org/openvpn.php
+sudo kldload if_tun
+#To ensure this module is loaded at boot time, add the following line to /boot/loader.conf:
+if_tun_load="YES"
 
 
 
@@ -67,44 +73,8 @@ sudo chmod 666 -Rv /media/HDD1000G
 #-Mounting a samba shared drive on FreeBsd
 #-http://blog.up-link.ro/freebsd-how-to-mount-smb-cifs-shares-under-freebsd/
 mkdir -p /media/HDD1000G
-mount_smbfs -O pi:pi -I 192.168.0.10 //pi@192.168.0.10/HDD1000G /media/HDD1000G
+mount_smbfs -O freebsd:freebsd -I 192.168.0.10 //pi@192.168.0.10/HDD1000G /media/HDD1000G
 
-
-#-Settings Samba
-cd /etc/samba
-rm smb.conf && rm smbusers
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/samba/smb.conf
-systemctl enable smbd && systemctl start smbd
-systemctl enable nmbd && systemctl start nmbd
-
-
-#-Installing Shellinabox
-yaourt shellinabox-git
-systemctl enable shellinabox-git && systemctl start shellinabox-git
-
-#-Installing Nginx and setting up reverse proxy
-yaourt -S nginx
-
-#-Generating and installing self-signed certificate
-# https://wiki.archlinux.org/index.php/Nginx#TLS.2FSSL
-cd /etc/nginx
-rm nginx.conf
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/nginx.conf
-mkdir /etc/nginx/ssl
-cd /etc/nginx/ssl
-openssl req -new -x509 -nodes -newkey rsa:4096 -keyout server.key -out server.crt -days 1095
-chmod 400 server.key
-chmod 444 server.crt
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/ssl/server.crt
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/ssl/server.key
-systemctl restart nginx
-
-#-Installin ezServerMonitor
-sudo -i
-cd /usr/share/nginx/html/
-wget https://www.ezservermonitor.com/esm-web/downloads/version/2.5
-unzip -o -d ./ 2.5
-rm 2.5
 
 #-INstalling and configuring transmission
 # https://wiki.archlinux.org/index.php/Transmission
