@@ -77,6 +77,15 @@ wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/sam
 systemctl enable smbd && systemctl start smbd
 systemctl enable nmbd && systemctl start nmbd
 
+# Installing python an pip
+# https://nerd.h8u.net/2016/01/29/installing-python-package-manager-pip-on-freebsd/
+pkg install python python3
+python -m ensurepip
+
+# Installing Glances
+# https://github.com/nicolargo/glances/blob/master/README.rst
+pip install glances
+
 
 #-Installing Shellinabox
 yaourt shellinabox-git
