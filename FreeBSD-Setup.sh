@@ -76,6 +76,21 @@ mkdir -p /media/HDD1000G
 mount_smbfs -O freebsd:freebsd -I 192.168.0.10 //pi@192.168.0.10/HDD1000G /media/HDD1000G
 
 
+
+# Installing python an pip
+# https://nerd.h8u.net/2016/01/29/installing-python-package-manager-pip-on-freebsd/
+pkg install python python3
+python -m ensurepip
+
+# Installing Glances
+# https://github.com/nicolargo/glances/blob/master/README.rst
+sudo pip install glances
+sudo pip install bottle
+# http://glances.readthedocs.io/en/stable/quickstart.html
+# launching Web Server Mode
+glances -w  # the type http://@server:61208
+glances --theme-white
+
 #-INstalling and configuring transmission
 # https://wiki.archlinux.org/index.php/Transmission
 yaourt transmission-cli

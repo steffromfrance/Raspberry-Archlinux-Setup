@@ -158,29 +158,26 @@ def startconn():
 
     # args2 = ['sudo', 'openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
     # args2 = ['/usr/sbin/openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
-    args2 = ['sudo', 'openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
-    args2.append('--cd')
-    args2.append(CCPath)
+    args2 = ['sudo', 'openvpn', '--daemon', '--script-security ', '2', '--verb', '4', '--mute', '5']
+    # args2.append('--cd')
+    # args2.append(CCPath)
+
+    args2.append('--config')
+    args2.append(CCPath + '/' + conffile)
+
     args2.append('--ca')
-    args2.append('ca.crt')
+    args2.append(CCPath + '/' + 'ca.crt')
     args2.append('--tls-auth')
-    args2.append('Wdc.key')
+    args2.append(CCPath + '/' + 'Wdc.key')
     args2.append('--auth-user-pass')
-    args2.append('auth.txt')
+    args2.append(CCPath + '/' + 'auth.txt')
     args2.append('--log-append')
     args2.append(LogFile)
-    args2.append('--config')
-    args2.append(conffile)
 
+    # Loggin the command line
     s = " "
     s.join(args2)
     log("Args used to launch OpenVpn : " + s.join(args2))
-
-    # openvpn_cmd = ['sudo', 'openvpn', '--config', 'client.cfg', '--auth-user-pass', 'hmaauth.conf']
-
-    # prog = subprocess.Popen(args2)
-    # exit(0)
-
 
     oPid = subprocess.Popen(args2)
     log("OpenVpn launched with return code: [" + str(oPid.returncode) + "]")
