@@ -6,6 +6,9 @@
 # watch -n 10 'traceroute -m 2 www.yahoo.com'
 # watch -n 10 'dig +short myip.opendns.com @resolver2.opendns.com'
 
+# Manual Laucnh of the VPN connection to test what is wrong
+# openvpn --script-security  2 --verb 4 --mute 5 --config /media/HDD1000G/Raspberry-Archlinux-Setup/etc/openvpn/client/cfg2017/Netherlands2-tcp.ovpn --ca /media/HDD1000G/Raspberry-Archlinux-Setup/etc/openvpn/client/cfg2017/ca.crt --tls-auth /media/HDD1000G/Raspberry-Archlinux-Setup/etc/openvpn/client/cfg2017/Wdc.key --auth-user-pass /media/HDD1000G/Raspberry-Archlinux-Setup/etc/openvpn/client/cfg2017/auth.txt
+# openvpn  --script-security  2 --verb 4 --mute 5 --config /media/HDD1000G/Raspberry-Archlinux-Setup/etc/openvpn/client/cfg2017/Netherlands1-udp.ovpn --ca /media/HDD1000G/Raspberry-Archlinux-Setup/etc/openvpn/client/cfg2017/ca.crt --tls-auth /media/HDD1000G/Raspberry-Archlinux-Setup/etc/openvpn/client/cfg2017/Wdc.key --auth-user-pass /media/HDD1000G/Raspberry-Archlinux-Setup/etc/openvpn/client/cfg2017/auth.txt 
 
 import datetime
 import time
@@ -158,7 +161,7 @@ def startconn():
 
     # args2 = ['sudo', 'openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
     # args2 = ['/usr/sbin/openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
-    args2 = ['sudo', 'openvpn', '--daemon', '--script-security ', '2', '--verb', '4', '--mute', '5']
+    args2 = ['sudo', 'openvpn', '--verb', '4', '--mute', '5']
     # args2.append('--cd')
     # args2.append(CCPath)
 
@@ -171,8 +174,10 @@ def startconn():
     args2.append(CCPath + '/' + 'Wdc.key')
     args2.append('--auth-user-pass')
     args2.append(CCPath + '/' + 'auth.txt')
+    # args2.append('--script-security ', '2')
     args2.append('--log-append')
     args2.append(LogFile)
+    # args2.append('--daemon')
 
     # Loggin the command line
     s = " "
