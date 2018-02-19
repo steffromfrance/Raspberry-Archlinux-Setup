@@ -91,6 +91,26 @@ sudo pip install bottle
 glances -w  # the type http://@server:61208
 glances --theme-white
 
+#-Initialising Ports Collection
+#-https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/ports-using.html
+portsnap fetch
+portsnap extract 
+portsnap fetch update
+
+
+
+#-INstalling a DE
+sudo pkg install fluxbox
+#https://fosskb.in/2016/02/15/installing-mate-desktop-on-freebsd-11/
+
+#-XFCE4
+#-https://www.freshports.org/x11-wm/xfce4/
+cd /usr/ports/x11-wm/xfce4/ && make install clean
+pkg install xfce
+
+
+
+
 #-INstalling and configuring transmission
 # https://wiki.archlinux.org/index.php/Transmission
 yaourt transmission-cli
