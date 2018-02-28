@@ -38,11 +38,11 @@ oPid = 0
 def getHelp():
     print('')
     print("Start an monitor a existing VPN connection and watch if your current country is not exposed.")
-    print("Usage : monitor-vpn-connection.py COUNTRYCODE VPNTYPE VPNCONFIG ")
+    # print("Usage : monitor-vpn-connection.py COUNTRYCODE VPNTYPE VPNCONFIG ")
+    print("Usage : monitor-vpn-connection.py VPNTYPE VPNCONFIG ")
     print("        COUNTRYCODE : country code to hide (FR,GB,....)")
     # print("        VPNTYPE : OPENVPN or PPTP")
-    print("        VPNCONFIG : depending of the VPNTYPE used")
-    print("                    -subfolder containing the OPENVPN configuration files (*.ovpn) to use randomly")
+    print("        VPNCONFIG : subfolder containing the OPENVPN configuration files (*.ovpn) to use randomly")
     # print("                    -name of the PPTP connection name to use")
     print('')
     exit()
@@ -123,7 +123,8 @@ def displayinfo():
 # log("Script start=" + time.strftime("%Y-%m-%d %H:%M:%S", TimeStart))
     log("Current Path=[" + CCPath + "]")
     # Using a log file by week
-    LogFile = "/var/log/openvpn-client-"
+    # LogFile = "/var/log/openvpn-client-"
+    LogFile = CCPath + '/openvpn-client-'
     LogFile += str(datetime.datetime.isocalendar(datetime.datetime.now())[0]) + "-"
     LogFile += str(datetime.datetime.isocalendar(datetime.datetime.now())[1]).zfill(2) + ".log"
     log("LogFile : " + LogFile)
@@ -161,9 +162,20 @@ def startconn():
 
     # args2 = ['sudo', 'openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
     # args2 = ['/usr/sbin/openvpn', '--daemon', '--script-security ', '2', '--verb', '3', '--mute', '5']
-    args2 = ['sudo', 'openvpn', '--verb', '4', '--mute', '5']
+    
+    # Defining the openvpn binary to execute depending on the OS
+    if os.name == 'nt':
+        args2 = ['"C:\\Program Files\\OpenVPN\\bin\\openvpn.exe"']
+    else:
+        args2 = ['sudo', 'openvpn']
+    
     # args2.append('--cd')
     # args2.append(CCPath)
+
+    args2.append('--verb')
+    args2.append('4')
+    args2.append('--mute')
+    args2.append('5')
 
     args2.append('--config')
     args2.append(CCPath + '/' + conffile)
@@ -175,9 +187,11 @@ def startconn():
     args2.append('--auth-user-pass')
     args2.append(CCPath + '/' + 'auth.txt')
     # args2.append('--script-security ', '2')
-    args2.append('--log-append')
-    args2.append(LogFile)
-    # args2.append('--daemon')
+    
+	# args2.append('--log-append')
+    # args2.append(LogFile)
+    
+	# args2.append('--daemon')
 
     # Loggin the command line
     s = " "
@@ -191,7 +205,7 @@ def startconn():
 # Stopping any existing  OpenVpn Connection
 def stopconn():
     argskill = ['sudo', 'killall', 'openvpn']
-    oPid = subprocess.Popen(argskill)
+    # oPid = subprocess.Popen(argskill)
 
 # Main start of the script
 clearscreen()

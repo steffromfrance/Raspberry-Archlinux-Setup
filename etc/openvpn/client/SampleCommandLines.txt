@@ -1,0 +1,4 @@
+#Sample command line
+
+Under Windows as Admin Cmd
+"C:\Program Files\OpenVPN\Bin\openvpn.exe" --verb 4 --mute 5 --config C:\Users\steph\Desktop\Raspberry-Archlinux-Setup\etc\openvpn\client\cfg2017/Netherlands2-tcp.ovpn --ca C:\Users\steph\Desktop\Raspberry-Archlinux-Setup\etc\openvpn\client\cfg2017/ca.crt --tls-auth C:\Users\steph\Desktop\Raspberry-Archlinux-Setup\etc\openvpn\client\cfg2017/Wdc.key --auth-user-pass C:\Users\steph\Desktop\Raspberry-Archlinux-Setup\etc\openvpn\client\cfg2017/auth.txt 
