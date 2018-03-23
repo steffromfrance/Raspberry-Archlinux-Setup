@@ -42,7 +42,7 @@ sudo passwd
 nano /etc/network/interfaces
 auto eth0
 iface eth0 inet static
-address 192.168.0.100
+address 192.168.0.10
 netmask 255.255.255.0
 network 192.168.0.0
 broadcast 192.168.0.255
@@ -69,9 +69,7 @@ chmod 600 ~/.smbcredentials
 echo '//192.168.0.10/HDD1000G /media/HDD1000G cifs credentials=/root/.smbcredentials,nofail,iocharset=utf8,sec=ntlm 0 0 ' >> /etc/fstab
 mount -a -v
 
-#Adding system environnement variable
-echo FREE_FTP_USER="free_ftp_user" >> /etc/environment                                             
-echo FREE_FTP_PWD="free_ftp_pwd" >> /etc/environment                                            
+
 
 #-Settings Samba
 cd /etc/samba
@@ -106,6 +104,41 @@ wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/ngi
 wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/ssl/server.key
 systemctl restart nginx
 
+#
+sudo nano /etc/environment                                                
+....
+FREE_FTP_USER=stef2018                                                                                                   
+FREE_FTP_PWD=password
+
+#-Installting and configuraing lftp
+# http://www.russbrooks.com/2010/11/19/lftp-cheetsheet
+sudo apt install lftp
+#
+sudo echo 'FREE_FTP_USER=stef2018'  >> /etc/environment                                                
+sudo echo 'FREE_FTP_PWD=password'  >> /etc/environment                                                
+sudo reboot                                                                                             
+
+lftp -u $FREE_FTP_USER,$FREE_FTP_PWD ftpperso.free.fr
+mkdir  stef2001-ubuntu001
+CD stef2001-ubuntu001
+lftp -e 'mirror -R /var/lib/monitorix/www/imgs/ /stef2001-ubuntu001/monitorix/' -u $FREE_FTP_USER,$FREE_FTP_PWD ftpperso.free.fr
+
+
+#-Installtin and setting up Monitorix
+#-http://www.monitorix.org/
+echo deb http://apt.izzysoft.de/ubuntu generic universe  >> /etc/apt/sources.list
+wget http://apt.izzysoft.de/izzysoft.asc 
+sudo apt-key add izzysoft.asc                                                                                     
+sudo apt update                                                                                                   
+sudo apt install monitorix                                                                                    
+sudo systemctl disable monitorix
+#-Generating HTML files
+cd /var/lib/monitorix/www/cgi
+./monitorix.cgi mode=localhost graph=all when=day color=black
+ 
+
+
+
 #-Installin ezServerMonitor
 sudo -i
 cd /usr/share/nginx/html/
@@ -135,44 +168,4 @@ apt-get install xfce4 xfce4-goodies
 apt-get install realvnc-vnc-server
 vncserver
 vncserver -kill :1
-
-
-cd /home/alarm/.vnc
-rm xstartup
-wget  https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/home/alarm/.vnc/xstartup
-chmod u+x xstartup
-rm config
-https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/home/alarm/.vnc/config
-sudo loginctl enable-linger pi
-systemctl --user enable vncserver@:1
-systemctl --user start vncserver@:1
-
-#-Installing and configuring novnc
-#-https://github.com/novnc/noVNC
-git clone https://github.com/novnc/noVNC.git
-cd noVNC
-./utils/launch.sh --vnc localhost:5901
-
-
-#-Installing and configuring my OpenVpn connection
-# https://support.purevpn.com/linux-openvpn-command/
-mkdir -p /var/log/openvpn/client
-cd /etc/openvpn/
-rm vpn-*.sh
-wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/vpn-down.sh
-wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/vpn-up.sh
-chmod u+x vpn-*.sh
-cd /etc/openvpn/client
-rm *.sh 
-wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/client/monitor-openvpn-connection.sh 
-wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/client/start-purevpn.sh
-chmod u+x *.sh
-wget https://s3-us-west-1.amazonaws.com/heartbleed/linux/linux-files.zip
-cp Linux\ OpenVPN\ Updated\ files/ca.crt ./ca.crt
-cp Linux\ OpenVPN\ Updated\ files/Wdc.key ./Wdc.key
-nano auth.txt
-ln -sf Linux\ OpenVPN\ Updated\ files/TCP/Netherlands1-tcp.ovpn clien.conf
-bash monitor-openvpn-connection.sh
-tail -f /var/log/openvpn/client
-
 
