@@ -69,7 +69,9 @@ chmod 600 ~/.smbcredentials
 echo '//192.168.0.10/HDD1000G /media/HDD1000G cifs credentials=/root/.smbcredentials,nofail,iocharset=utf8,sec=ntlm 0 0 ' >> /etc/fstab
 mount -a -v
 
-
+#Adding system environnement variable
+echo FREE_FTP_USER="free_ftp_user" >> /etc/environment                                             
+echo FREE_FTP_PWD="free_ftp_pwd" >> /etc/environment                                            
 
 #-Settings Samba
 cd /etc/samba
