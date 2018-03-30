@@ -181,3 +181,4 @@ hdmi_group=2
 hdmi_mode=16
 
 sudo mount -o remount,ro /boot
+sudo reboot
