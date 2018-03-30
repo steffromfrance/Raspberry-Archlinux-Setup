@@ -13,7 +13,7 @@ apt-get install raspi-config tmux
 #Expanding the user space to the entire sd card
 raspi-config
 apt-get dist-upgrade
-apt-get install sudo perl htop git openvpn wget unzip zip zsh 
+apt-get install sudo perl htop git openvpn wget unzip zip zsh
 apt-get install dnsutils nmon nano cifs-utils traceroute mc ncdu samba
 
 #-Creating user
@@ -61,7 +61,7 @@ mount -a ext4
 sudo chown pi:pi -Rv /media/HDD1000G
 sudo chmod 666 -Rv /media/HDD1000G
 
-#-Mounting a samba shared drive 
+#-Mounting a samba shared drive
 #-https://wiki.ubuntu.com/MountWindowsSharesPermanently
 mkdir -p /media/HDD1000G
 echo -e 'username=msusername\npassword=mspassword\n' > ~/.smbcredentials
@@ -105,18 +105,18 @@ wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/ngi
 systemctl restart nginx
 
 #
-sudo nano /etc/environment                                                
+sudo nano /etc/environment
 ....
-FREE_FTP_USER=stef2018                                                                                                   
+FREE_FTP_USER=stef2018
 FREE_FTP_PWD=password
 
 #-Installting and configuraing lftp
 # http://www.russbrooks.com/2010/11/19/lftp-cheetsheet
 sudo apt install lftp
 #
-sudo echo 'FREE_FTP_USER=stef2018'  >> /etc/environment                                                
-sudo echo 'FREE_FTP_PWD=password'  >> /etc/environment                                                
-sudo reboot                                                                                             
+sudo echo 'FREE_FTP_USER=stef2018'  >> /etc/environment
+sudo echo 'FREE_FTP_PWD=password'  >> /etc/environment
+sudo reboot
 
 lftp -u $FREE_FTP_USER,$FREE_FTP_PWD ftpperso.free.fr
 mkdir  stef2001-ubuntu001
@@ -127,15 +127,15 @@ lftp -e 'mirror -R /var/lib/monitorix/www/imgs/ /stef2001-ubuntu001/monitorix/' 
 #-Installtin and setting up Monitorix
 #-http://www.monitorix.org/
 echo deb http://apt.izzysoft.de/ubuntu generic universe  >> /etc/apt/sources.list
-wget http://apt.izzysoft.de/izzysoft.asc 
-sudo apt-key add izzysoft.asc                                                                                     
-sudo apt update                                                                                                   
-sudo apt install monitorix                                                                                    
+wget http://apt.izzysoft.de/izzysoft.asc
+sudo apt-key add izzysoft.asc
+sudo apt update
+sudo apt install monitorix
 sudo systemctl disable monitorix
 #-Generating HTML files
 cd /var/lib/monitorix/www/cgi
 ./monitorix.cgi mode=localhost graph=all when=day color=black
- 
+
 
 
 
@@ -169,3 +169,15 @@ apt-get install realvnc-vnc-server
 vncserver
 vncserver -kill :1
 
+#-Setup for RealVnc server in Headless Mode
+# https://www.realvnc.com/fr/connect/docs/raspberry-pi.html
+# forcing HDMI output
+sudo mount -o remount,rw /boot
+
+nano /boot/config.txt
+hdmi_force_hotplug=1
+hdmi_ignore_edid=0xa5000080
+hdmi_group=2
+hdmi_mode=16
+
+sudo mount -o remount,ro /boot
