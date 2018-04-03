@@ -24,7 +24,7 @@ overscan_bottom=10
 
 
 #-Getting doc on https://www.freebsd.org/doc/handbook/basics.html
-# Connect to SSH : freebsd/freebsd or root/root 
+# Connect to SSH : freebsd/freebsd or root/root
 
 #-installing some stuff
 pkg install sudo zsh
@@ -33,7 +33,7 @@ pkg install bind-tools
 
 #-Creating user
 adduser pi
-pw groupmod  wheel -m pi 
+pw groupmod  wheel -m pi
 
 visudo
 #Navigate to the place you wish to edit using the up and down arrow keys.
@@ -94,7 +94,7 @@ glances --theme-white
 #-Initialising Ports Collection
 #-https://www.freebsd.org/doc/en_US.ISO8859-1/books/handbook/ports-using.html
 portsnap fetch
-portsnap extract 
+portsnap extract
 portsnap fetch update
 
 
@@ -107,70 +107,3 @@ sudo pkg install fluxbox
 #-https://www.freshports.org/x11-wm/xfce4/
 cd /usr/ports/x11-wm/xfce4/ && make install clean
 pkg install xfce
-
-
-
-
-#-INstalling and configuring transmission
-# https://wiki.archlinux.org/index.php/Transmission
-yaourt transmission-cli
-yaourt transmission-remote-cli-git
-yaourt python2-geoip
-yaourt adns-python
-sudo systemctl enable transmission
-sudo systemctl start transmission
-sudo systemctl stop transmission
-cd /var/lib/transmission/.config/transmission-daemon
-rm settings.json
-wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/var/lib/transmission/.config/transmission-daemon/settings.json
-
-#-Installing LXDE
-# https://wiki.archlinux.org/index.php/LXDE
-apt-get install xfce4 xfce4-goodies
-
-#-Installing vncserver
-#-Configuring the desktop https://support.realvnc.com/Knowledgebase/Article/View/345/0/
-apt-get install realvnc-vnc-server
-vncserver
-vncserver -kill :1
-
-
-cd /home/alarm/.vnc
-rm xstartup
-wget  https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/home/alarm/.vnc/xstartup
-chmod u+x xstartup
-rm config
-https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/home/alarm/.vnc/config
-sudo loginctl enable-linger pi
-systemctl --user enable vncserver@:1
-systemctl --user start vncserver@:1
-
-#-Installing and configuring novnc
-#-https://github.com/novnc/noVNC
-git clone https://github.com/novnc/noVNC.git
-cd noVNC
-./utils/launch.sh --vnc localhost:5901
-
-
-#-Installing and configuring my OpenVpn connection
-# https://support.purevpn.com/linux-openvpn-command/
-mkdir -p /var/log/openvpn/client
-cd /etc/openvpn/
-rm vpn-*.sh
-wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/vpn-down.sh
-wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/vpn-up.sh
-chmod u+x vpn-*.sh
-cd /etc/openvpn/client
-rm *.sh 
-wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/client/monitor-openvpn-connection.sh 
-wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/openvpn/client/start-purevpn.sh
-chmod u+x *.sh
-wget https://s3-us-west-1.amazonaws.com/heartbleed/linux/linux-files.zip
-cp Linux\ OpenVPN\ Updated\ files/ca.crt ./ca.crt
-cp Linux\ OpenVPN\ Updated\ files/Wdc.key ./Wdc.key
-nano auth.txt
-ln -sf Linux\ OpenVPN\ Updated\ files/TCP/Netherlands1-tcp.ovpn clien.conf
-bash monitor-openvpn-connection.sh
-tail -f /var/log/openvpn/client
-
-

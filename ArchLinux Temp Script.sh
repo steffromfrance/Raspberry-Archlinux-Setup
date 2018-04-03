@@ -35,95 +35,12 @@ sudo passwd
 
 
 
-#-Mounting my External Hard Drive
-mkdir -p /media/HDD1000G
-echo "UUID=eebde59c-f5ea-45bb-8671-71e1d4468094 /media/HDD1000G ext4 noatime,nofail 0 0" >> /etc/fstab
-mount -a ext4
-sudo chown alarm:alarm -Rv /media/HDD1000G
-sudo chmod 660 -Rv /media/HDD1000G
-
 
 #-Adding other stuff
 yaourt -S xfce4 xfce4-goodies
 
-#-Settings Samba
-cd /etc/samba
-rm smb.conf && rm smbusers
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/samba/smb.conf
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/samba/smbusers
-systemctl enable smbd && systemctl start smbd
-systemctl enable nmbd && systemctl start nmbd
-smbpasswd -a alarm
-smbpasswd -a pi
+
 
 #-Installing Shellinabox
 yaourt shellinabox-git
 systemctl enable shellinabox-git && systemctl start shellinabox-git
-
-#-Installing Nginx and setting up reverse proxy
-yaourt -S nginx
-
-#-Generating and installing self-signed certificate
-# https://wiki.archlinux.org/index.php/Nginx#TLS.2FSSL
-cd /etc/nginx
-rm nginx.conf
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/nginx.conf
-mkdir /etc/nginx/ssl
-cd /etc/nginx/ssl
-openssl req -new -x509 -nodes -newkey rsa:4096 -keyout server.key -out server.crt -days 1095
-chmod 400 server.key
-chmod 444 server.crt
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/ssl/server.crt
-wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/nginx/ssl/server.key
-systemctl restart nginx
-
-#-Installin ezServerMonitor
-sudo -i
-cd /usr/share/nginx/html/
-wget https://www.ezservermonitor.com/esm-web/downloads/version/2.5
-unzip -o -d ./ 2.5
-rm 2.5
-
-#-INstalling and configuring transmission
-# https://wiki.archlinux.org/index.php/Transmission
-yaourt transmission-cli
-yaourt transmission-remote-cli-git
-yaourt python2-geoip
-yaourt adns-python
-sudo systemctl enable transmission
-sudo systemctl start transmission
-sudo systemctl stop transmission
-cd /var/lib/transmission/.config/transmission-daemon
-rm settings.json
-wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/var/lib/transmission/.config/transmission-daemon/settings.json
-
-#-Installing LXDE
-# https://wiki.archlinux.org/index.php/LXDE
-sudo pacman -S lxde gvfs xarchiver
-
-#-Installing vncserver
-# https://wiki.archlinux.org/index.php/TigerVNC
-sudo pacman -S tigervnc
-vncserver
-vncserver -kill :1
-cd /home/alarm/.vnc
-rm xstartup
-wget  https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/home/alarm/.vnc/xstartup
-chmod u+x xstartup
-rm config
-https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/home/alarm/.vnc/config
-sudo loginctl enable-linger alarm
-systemctl --user enable vncserver@:1
-systemctl --user start vncserver@:1
-
-#-Installing and configuring novnc
-#-https://github.com/novnc/noVNC
-git clone https://github.com/novnc/noVNC.git
-cd noVNC
-./utils/launch.sh --vnc localhost:5901
-
-
-
-
-
-
