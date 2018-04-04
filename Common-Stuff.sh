@@ -4,13 +4,14 @@
 #-Setup for RealVnc server in Headless Mode
 # https://www.realvnc.com/fr/connect/docs/raspberry-pi.html
 # forcing HDMI output
+#https://www.raspberrypi.org/documentation/configuration/config-txt/video.md
 sudo mount -o remount,rw /boot
 
 nano /boot/config.txt
 hdmi_force_hotplug=1
 hdmi_ignore_edid=0xa5000080
 hdmi_group=2
-hdmi_mode=16
+hdmi_mode=23
 
 sudo mount -o remount,ro /boot
 sudo reboot
@@ -22,6 +23,7 @@ sudo nano /etc/environment
 ....
 FREE_FTP_USER=stef2018
 FREE_FTP_PWD=MYPASSWORD
+
 
 #-Installting and configuraing lftp
 # http://www.russbrooks.com/2010/11/19/lftp-cheetsheet
@@ -59,11 +61,17 @@ sudo chmod 666 -Rv /media/HDD1000G
 mkdir -p /media/HDD1000G
 echo -e 'username=msusername\npassword=mspassword\n' > ~/.smbcredentials
 chmod 600 ~/.smbcredentials
-echo '//192.168.0.10/HDD1000G /media/HDD1000G cifs credentials=/root/.smbcredentials,nofail,iocharset=utf8,sec=ntlm 0 0 ' >> /etc/fstab
+echo '//192.168.0.100/HDD1000G /media/HDD1000G cifs credentials=/root/.smbcredentials,nofail,iocharset=utf8,file_mode=0770,dir_mode=0770,gid=1000,uid=1000 0 0 ' >> /etc/fstab
+
 mount -a -v
+mount.cifs //192.168.0.100/HDD1000G /media/HDD1000G user=pi,pass=PASSWORD,iocharset=utf8,file_mode=0770,dir_mode=0770,gid=1000,uid=1000
 
-
-
+#-Installing a configuring conky
+apt install conky
+mkdir -p /etc/conky
+cd /etc/conky
+wget https://raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/conky/conky-partmagic.conf
+conky -d -c /etc/conky/conky-partmagic.conf
 
 #-Installing LXDE
 # https://wiki.archlinux.org/index.php/LXDE
