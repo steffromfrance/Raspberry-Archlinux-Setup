@@ -12,8 +12,8 @@
 
 import datetime
 import time
-from urllib.request import urlopen
-from json import load
+import urllib.request
+import json
 import os
 from os import listdir
 from os.path import isfile, join
@@ -39,7 +39,7 @@ def getHelp():
     print('')
     print("Start an monitor a existing VPN connection and watch if your current country is not exposed.")
     # print("Usage : monitor-vpn-connection.py COUNTRYCODE VPNTYPE VPNCONFIG ")
-    print("Usage : monitor-vpn-connection.py VPNTYPE VPNCONFIG ")
+    print("Usage : monitor-vpn-connection.py COUNTRYCODE VPNCONFIG ")
     print("        COUNTRYCODE : country code to hide (FR,GB,....)")
     # print("        VPNTYPE : OPENVPN or PPTP")
     print("        VPNCONFIG : subfolder containing the OPENVPN configuration files (*.ovpn) to use randomly")
@@ -78,31 +78,27 @@ def formatedtime():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
 
-# get the current public ip
-# https://stackoverflow.com/questions/9481419/how-can-i-get-the-public-ip-using-python2-7?noredirect=1&lq=1
-def getIp():
-    return load(urlopen('http://freegeoip.net/json/'))['ip']
-
-
-# get the current public country code
-# https://stackoverflow.com/questions/9481419/how-can-i-get-the-public-ip-using-python2-7?noredirect=1&lq=1
-def getCC():
-    return load(urlopen('http://freegeoip.net/json/'))['country_code']
-
-
-# get the current public country
-# https://stackoverflow.com/questions/9481419/how-can-i-get-the-public-ip-using-python2-7?noredirect=1&lq=1
-def getpubliccountry():
-    return load(urlopen('http://freegeoip.net/json/'))['country_name']
+# Update current Public IP information
+def getpublicinfold():
+    global Ip, CC, CB
+    PublicInfo = load(urlopen('http://api.ipstack.com/check?access_key=e7f3bebdad486686512b31e9475f31d3&format=1'))
+    CB = PublicInfo['country_name']
+    CC = PublicInfo['country_code']
+    Ip = PublicInfo['ip']
+    # exit()
 
 
 # Update current Public IP information
 def getpublicinfo():
     global Ip, CC, CB
-    PublicInfo = load(urlopen('http://freegeoip.net/json/'))
+    
+    with urllib.request.urlopen("http://api.ipstack.com/check?access_key=e7f3bebdad486686512b31e9475f31d3&format=1") as url:
+        PublicInfo = json.loads(url.read().decode())
+        #print(PublicInfo)
     CB = PublicInfo['country_name']
     CC = PublicInfo['country_code']
     Ip = PublicInfo['ip']
+    # exit()
 
 
 # clear the current terminal
@@ -169,29 +165,33 @@ def startconn():
     else:
         args2 = ['sudo', 'openvpn']
     
-    # args2.append('--cd')
-    # args2.append(CCPath)
+    args2.append('--cd')
+    args2.append(CCPath)
 
     args2.append('--verb')
-    args2.append('4')
+    args2.append('7')
     args2.append('--mute')
     args2.append('5')
 
     args2.append('--config')
+    #args2.append(CCPath + '/' + conffile)
     args2.append(CCPath + '/' + conffile)
 
     args2.append('--ca')
-    args2.append(CCPath + '/' + 'ca.crt')
+    #args2.append(CCPath + '/' + 'ca.crt')
+    args2.append('ca.crt')
     args2.append('--tls-auth')
-    args2.append(CCPath + '/' + 'Wdc.key')
+    #args2.append(CCPath + '/' + 'Wdc.key')
+    args2.append('Wdc.key')
     args2.append('--auth-user-pass')
-    args2.append(CCPath + '/' + 'auth.txt')
+    #args2.append(CCPath + '/' + 'auth.txt')
+    args2.append('auth.txt')
     # args2.append('--script-security ', '2')
     
-	# args2.append('--log-append')
-    # args2.append(LogFile)
+    args2.append('--log-append')
+    args2.append(LogFile)
     
-	# args2.append('--daemon')
+    args2.append('--daemon')
 
     # Loggin the command line
     s = " "
@@ -205,7 +205,7 @@ def startconn():
 # Stopping any existing  OpenVpn Connection
 def stopconn():
     argskill = ['sudo', 'killall', 'openvpn']
-    # oPid = subprocess.Popen(argskill)
+    oPid = subprocess.Popen(argskill)
 
 # Main start of the script
 clearscreen()
@@ -221,8 +221,8 @@ try:
         # If the country code is not hidden, restarting the connection
         if CC == CCToHide:
             startconn()
-            log("Sleeping 30 seconds before next check....")
-            time.sleep(30) # Sleeping for 30 sec
+            log("Sleeping 2 minutes seconds before next check....")
+            time.sleep(120) # Sleeping for 2 minutes
 
         time.sleep(SleepTime)
         clearscreen()
@@ -230,6 +230,7 @@ except KeyboardInterrupt:
     log("")
     log("KeyboardInterrupt sequence received...ending script")
     log("")
+    stopconn()
     pass
 
 log("Script end")
