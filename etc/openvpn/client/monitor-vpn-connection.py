@@ -27,9 +27,11 @@ from pathlib import Path
 # the amount to wait between check in Minutes
 SleepTime = (1 * 60) / 20  # 3 seconds
 SleepTime = (1 * 60) / 12  # 5 seconds
-SleepTime = (1 * 60) / 2  # 30 seconds
+SleepTime = (1 * 60) / 2  	# 30 seconds
+SleepTime = (3 * 60)  		# 3 minutes
 TimeStart = datetime.datetime.now()
 NbConnect = 0
+NbLostDns = 0
 SubDir = ''
 oPid = 0
 
@@ -90,15 +92,22 @@ def getpublicinfold():
 
 # Update current Public IP information
 def getpublicinfo():
-    global Ip, CC, CB
+    global Ip, CC, CB, NbLostDns
     
-    with urllib.request.urlopen("http://api.ipstack.com/check?access_key=e7f3bebdad486686512b31e9475f31d3&format=1") as url:
-        PublicInfo = json.loads(url.read().decode())
-        #print(PublicInfo)
-    CB = PublicInfo['country_name']
-    CC = PublicInfo['country_code']
-    Ip = PublicInfo['ip']
-    # exit()
+    try:
+        with urllib.request.urlopen("http://api.ipstack.com/check?access_key=e7f3bebdad486686512b31e9475f31d3&format=1") as url:
+            PublicInfo = json.loads(url.read().decode())
+            #print(PublicInfo)
+        CB = PublicInfo['country_name']
+        CC = PublicInfo['country_code']
+        Ip = PublicInfo['ip']
+        # exit()
+    except:
+        log("DNS unreachable, connection lost")
+        NbLostDns = NbLostDns + 1
+        CC = CCToHide
+        CB = "UNKNOW COUNTRY"
+        Ip = "0.0.0.0.0"
 
 
 # clear the current terminal
@@ -125,12 +134,12 @@ def displayinfo():
     LogFile += str(datetime.datetime.isocalendar(datetime.datetime.now())[1]).zfill(2) + ".log"
     log("LogFile : " + LogFile)
     log("Duration=" + str(round(getTimeDifferenceFromStart(), 4)) + " hours \
-       Nb Disconnect=" + str(NbConnect))
-    log("Check Interval (seconds)=[" + str(SleepTime) + "]")
+       Nb Conn=" + str(NbConnect) + " Nb DNS Lost=" + str(NbLostDns))
+    # log("Check Interval (seconds)=[" + str(SleepTime) + "]")
     getpublicinfo()
     log("Public Info=[" + CB + "/" + CC + "/" + Ip + "]")
     # log("Args : " + print(sys.argv) )
-    log("CountryCodeToHide=[" + CCToHide + "]")
+    #log("CountryCodeToHide=[" + CCToHide + "]")
     log("========================================================")
 
 
@@ -169,7 +178,7 @@ def startconn():
     args2.append(CCPath)
 
     args2.append('--verb')
-    args2.append('7')
+    args2.append('9')
     args2.append('--mute')
     args2.append('5')
 
@@ -221,8 +230,8 @@ try:
         # If the country code is not hidden, restarting the connection
         if CC == CCToHide:
             startconn()
-            log("Sleeping 2 minutes seconds before next check....")
-            time.sleep(120) # Sleeping for 2 minutes
+            log("Sleeping " + str(SleepTime / 60) +  " minutes seconds before next check....")
+            time.sleep(SleepTime) # Sleeping for x minutes
 
         time.sleep(SleepTime)
         clearscreen()
