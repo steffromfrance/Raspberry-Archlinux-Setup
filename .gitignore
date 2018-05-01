@@ -1,1 +1,5 @@
 etc/openvpn/client/cfg2017/auth.txt
+# My VPN log file #
+###################
+auth.txt
+openvpn-client-*.log
