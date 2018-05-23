@@ -28,21 +28,22 @@ from pathlib import Path
 SleepTime = (1 * 60) / 20  # 3 seconds
 SleepTime = (1 * 60) / 12  # 5 seconds
 SleepTime = (1 * 60) / 2  	# 30 seconds
-SleepTime = (3 * 60)  		# 3 minutes
+SleepTime = (2 * 60)  		# 2 minutes
 TimeStart = datetime.datetime.now()
 NbConnect = 0
 NbLostDns = 0
 SubDir = ''
 oPid = 0
-
+ConnectionId = ''
+ProfileUsed = ''
+IpToHide = ''
 
 # Display a message usage
 def getHelp():
     print('')
-    print("Start an monitor a existing VPN connection and watch if your current country is not exposed.")
-    # print("Usage : monitor-vpn-connection.py COUNTRYCODE VPNTYPE VPNCONFIG ")
-    print("Usage : monitor-vpn-connection.py COUNTRYCODE VPNCONFIG ")
-    print("        COUNTRYCODE : country code to hide (FR,GB,....)")
+    print("Start an monitor a existing VPN connection and watch if your public ip is not exposed.")
+    print("Usage : monitor-vpn-connection.py IPTOHIDE VPNCONFIG ")
+    print("        IPTOHIDE : ip to hide (77.8.99.145, 77., )")
     # print("        VPNTYPE : OPENVPN or PPTP")
     print("        VPNCONFIG : subfolder containing the OPENVPN configuration files (*.ovpn) to use randomly")
     # print("                    -name of the PPTP connection name to use")
@@ -53,10 +54,9 @@ def getHelp():
 Ip = ""
 CB = ""
 CC = ""
-# Getting the first parameter representing the CountryCode to Hide
-# or setting it to FR if not defined
+# Getting the first parameter representing the Ip to Hide
 if(2 <= len(sys.argv)):
-    CCToHide = sys.argv[1]
+    IpToHide = sys.argv[1]
 else:
     getHelp()
 if(3 <= len(sys.argv)):
@@ -80,18 +80,8 @@ def formatedtime():
     return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
 
 
-# Update current Public IP information
-def getpublicinfold():
-    global Ip, CC, CB
-    PublicInfo = load(urlopen('http://api.ipstack.com/check?access_key=e7f3bebdad486686512b31e9475f31d3&format=1', timeout = 3))
-    CB = PublicInfo['country_name']
-    CC = PublicInfo['country_code']
-    Ip = PublicInfo['ip']
-    # exit()
-
-
-# Update current Public IP information
-def getpublicinfo():
+# Update current Public IP information using IP Stack
+def getpublicinfofromipstack():
     global Ip, CC, CB, NbLostDns
     
     try:
@@ -105,9 +95,8 @@ def getpublicinfo():
     except:
         log("DNS unreachable, connection lost")
         NbLostDns = NbLostDns + 1
-        CC = CCToHide
         CB = "UNKNOW COUNTRY"
-        Ip = "0.0.0.0.0"
+        Ip = IpToHide
 
 
 # clear the current terminal
@@ -136,7 +125,7 @@ def displayinfo():
     log("Duration=" + str(round(getTimeDifferenceFromStart(), 4)) + " hours \
        Nb Conn=" + str(NbConnect) + " Nb DNS Lost=" + str(NbLostDns))
     # log("Check Interval (seconds)=[" + str(SleepTime) + "]")
-    getpublicinfo()
+    getpublicinfofromipstack()
     log("Public Info=[" + CB + "/" + CC + "/" + Ip + "]")
     # log("Args : " + print(sys.argv) )
     #log("CountryCodeToHide=[" + CCToHide + "]")
@@ -147,7 +136,7 @@ def displayinfo():
 def startconn():
     global NbConnect, oPid
     NbConnect = NbConnect + 1
-    log("Country Code NOT HIDDEN => Starting an new connection")
+    log("My Public Ip NOT HIDDEN => Starting an new connection")
 
     # Determining a random .ovpn of the current directory
     f1 = [f for f in listdir(CCPath) if isfile(join(CCPath, f))]
@@ -161,6 +150,9 @@ def startconn():
         # file does not exist, creating the file with the good user right
         with os.fdopen(os.open(LogFile, os.O_WRONLY | os.O_CREAT, 0o600), 'w') as handle:
             handle.write('Init of the log file')
+    
+    #Defining a unique id for the connection
+    ConnectionId = ''
 
     # Defining all the parameters to open the connection
     # Using  SubProcess.Popen function https://docs.python.org/3/library/subprocess.html#subprocess.Popen
@@ -184,7 +176,9 @@ def startconn():
 
     args2.append('--config')
     #args2.append(CCPath + '/' + conffile)
-    args2.append(CCPath + '/' + conffile)
+    
+    ProfileUsed = CCPath + '/' + conffile
+    args2.append(ProfileUsed)
 
     args2.append('--ca')
     #args2.append(CCPath + '/' + 'ca.crt')
@@ -228,7 +222,7 @@ try:
     while True:
         displayinfo()
         # If the country code is not hidden, restarting the connection
-        if CC == CCToHide:
+        if Ip == IpToHide:
             startconn()
             log("Sleeping " + str(SleepTime / 60) +  " minutes seconds before next check....")
             time.sleep(SleepTime) # Sleeping for x minutes
