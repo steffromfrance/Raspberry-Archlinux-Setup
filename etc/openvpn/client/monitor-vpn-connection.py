@@ -28,7 +28,7 @@ from pathlib import Path
 SleepTime = (1 * 60) / 20  # 3 seconds
 SleepTime = (1 * 60) / 12  # 5 seconds
 SleepTime = (1 * 60) / 2  	# 30 seconds
-# SleepTime = (2 * 60)  		# 2 minutes
+SleepTime = (3 * 60)  		# 3 minutes
 TimeStart = datetime.datetime.now()
 NbConnect = 0
 NbLostDns = 0
