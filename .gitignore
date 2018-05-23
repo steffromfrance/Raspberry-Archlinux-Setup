@@ -3,4 +3,5 @@ etc/openvpn/client/cfg2017/auth.txt
 ###################
 auth.txt
 openvpn-client-*.log
-/etc/openvpn/client/nordvpn/nordvpn-2018-05.log
+/etc/openvpn/client/nordvpn
+*.ovpn
