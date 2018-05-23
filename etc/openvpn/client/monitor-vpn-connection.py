@@ -28,7 +28,7 @@ from pathlib import Path
 SleepTime = (1 * 60) / 20  # 3 seconds
 SleepTime = (1 * 60) / 12  # 5 seconds
 SleepTime = (1 * 60) / 2  	# 30 seconds
-SleepTime = (2 * 60)  		# 2 minutes
+# SleepTime = (2 * 60)  		# 2 minutes
 TimeStart = datetime.datetime.now()
 NbConnect = 0
 NbLostDns = 0
@@ -175,7 +175,7 @@ def startconn():
     args2.append('5')
 
     args2.append('--config')
-    #args2.append(CCPath + '/' + conffile)
+    # args2.append(CCPath + '/' + conffile)
     
     ProfileUsed = CCPath + '/' + conffile
     args2.append(ProfileUsed)
@@ -222,10 +222,12 @@ try:
     while True:
         displayinfo()
         # If the country code is not hidden, restarting the connection
-        if Ip == IpToHide:
+        if Ip.startswith( IpToHide ):
             startconn()
             log("Sleeping " + str(SleepTime / 60) +  " minutes seconds before next check....")
             time.sleep(SleepTime) # Sleeping for x minutes
+        else:
+           log("My public IP [" + IpToHide + "] is hidden => VPN up an running" )
 
         time.sleep(SleepTime)
         clearscreen()
