@@ -95,7 +95,7 @@ def getpublicinfo():
     global Ip, CC, CB, NbLostDns
     
     try:
-        with urllib.request.urlopen("http://api.ipstack.com/check?access_key=e7f3bebdad486686512b31e9475f31d3&format=1") as url:
+        with urllib.request.urlopen("http://api.ipstack.com/check?access_key=e7f3bebdad486686512b31e9475f31d3&format=1", timeout = 3) as url:
             PublicInfo = json.loads(url.read().decode())
             #print(PublicInfo)
         CB = PublicInfo['country_name']
@@ -215,7 +215,7 @@ def startconn():
 
 # Stopping any existing  OpenVpn Connection
 def stopconn():
-    argskill = ['sudo', 'killall', 'openvpn']
+    argskill = ['sudo', 'killall', '-w', 'openvpn']
     oPid = subprocess.Popen(argskill)
 
 # Main start of the script

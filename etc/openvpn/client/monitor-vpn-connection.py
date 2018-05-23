@@ -83,7 +83,7 @@ def formatedtime():
 # Update current Public IP information
 def getpublicinfold():
     global Ip, CC, CB
-    PublicInfo = load(urlopen('http://api.ipstack.com/check?access_key=e7f3bebdad486686512b31e9475f31d3&format=1'))
+    PublicInfo = load(urlopen('http://api.ipstack.com/check?access_key=e7f3bebdad486686512b31e9475f31d3&format=1', timeout = 3))
     CB = PublicInfo['country_name']
     CC = PublicInfo['country_code']
     Ip = PublicInfo['ip']
@@ -213,7 +213,7 @@ def startconn():
 
 # Stopping any existing  OpenVpn Connection
 def stopconn():
-    argskill = ['sudo', 'killall', 'openvpn']
+    argskill = ['sudo', 'killall', '-w', 'openvpn']
     oPid = subprocess.Popen(argskill)
 
 # Main start of the script
