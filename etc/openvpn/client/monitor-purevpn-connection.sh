@@ -32,7 +32,7 @@ function startconn
  index=$(($RANDOM % $size))
  log "Connecting to : [${array[$index]}] PureVPN Country"
  
- purevpn -c NL
+ purevpn -c ${array[$index]}
  STR="PUREVPN CONNECTION Started at $(date +%Y-%m-%d-%k-%M-%S)"
  log "$STR"
  log "NUMBER OF (RE)-CONNECTION : $NBCONN (since start of the script)"
