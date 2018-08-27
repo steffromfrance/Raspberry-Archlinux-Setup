@@ -5,3 +5,5 @@ auth.txt
 openvpn-client-*.log
 /etc/openvpn/client/nordvpn
 *.ovpn
+*.project
+*.pydevproject
