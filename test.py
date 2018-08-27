@@ -18,7 +18,7 @@ from pathlib import Path
 def getpublicinfofrompersofree():
     global Ip, CC, CB, NbLostDns
     with urllib.request.urlopen("http://stef2018.free.fr/monitoring/getpublicip.php") as url:
-            echo url
+            print(url)
             
             
             
