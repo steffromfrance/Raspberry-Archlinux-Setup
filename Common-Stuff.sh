@@ -46,8 +46,12 @@ wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/sam
 wget raw.githubusercontent.com/sstassin/Raspberry-Archlinux-Setup/master/etc/samba/smbusers
 systemctl enable smbd && systemctl start smbd
 systemctl enable nmbd && systemctl start nmbd
+systemctl stop nmbd && systemctl stop smbd
+systemctl restart smbd && systemctl restart nmbd
 smbpasswd -a alarm
 smbpasswd -a pi
+smbpasswd -a pirate
+
 
 #-Mounting my External Hard Drive
 mkdir -p /media/HDD1000G
