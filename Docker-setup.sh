@@ -30,11 +30,11 @@ docker container stop rpi2-samba && docker container rm rpi2-samba
 docker run --name rpi2-samba -d \
   --restart='always' --hostname 'rpi2-filer' \
   -p 137:137/udp -p 138:138/udp -p 139:139 -p 445:445 -p 445:445/udp \
-  -v /media/HDD1000G:/share/HDD1000G -v /var/log:/share/log \
+  -v /media/pi/HDD1000G:/share/HDD1000G -v /var/log:/share/log \
   dastrasmue/rpi-samba:v3 \
   -u "pi:pi" \
-  -s "Rpi2 Logs Files (readonly):/share/log:ro" \
-  -s "HDD1000G (private for pi):/share/HDD1000G:rw:pi"
+  -s "Logs:/share/log:ro" \
+  -s "HDD1000G:/share/HDD1000G:rw:pi"
 
 
 #-DuckDns
