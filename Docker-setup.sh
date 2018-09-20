@@ -33,8 +33,8 @@ docker run --name rpi2-samba -d \
   -v /media/HDD1000G:/share/HDD1000G -v /var/log:/share/log \
   dastrasmue/rpi-samba:v3 \
   -u "pi:pi" \
-  -s "Rpi2 Logs Files (readonly):/share/log:ro" \
-  -s "HDD1000G (private for pi):/share/HDD1000G:rw:pi"
+  -s "logs:/share/log:ro" \
+  -s "HDD1000G:/share/HDD1000G:rw:pi"
 
 #TransmissionOpenVPN : https://github.com/haugene/docker-transmission-openvpn
 echo "PUREVPNUSERNAME=myvpnusername" >> /etc/environnement
