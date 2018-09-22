@@ -41,37 +41,24 @@ echo "PUREVPNUSERNAME=myvpnusername" >> /etc/environnement
 echo "PUREVPNPWD=myvpnpwd" >> /etc/environnement
 docker container stop transmission && docker container rm transmission
 
-#Cloning and building
-git clone https://github.com/haugene/docker-transmission-openvpn.git
-cd docker-transmission-openvpn
-docker build -f Dockerfile.armhf -t  docker-transmission-openvpn:armhf .
-
 docker run --name=transmission --cap-add=NET_ADMIN --device=/dev/net/tun -d \
-              -v /media/pi/HDD1000G1/:/data \
-              -v /etc/localtime:/etc/localtime:ro \
-              -e OPENVPN_PROVIDER=PUREVPN \
-              -e OPENVPN_CONFIG=Netherlands1-tcp,Netherlands2-tcp,Norway-tcp,Sweden-tcp \
-              -e OPENVPN_USERNAME=$PUREVPNUSERNAME \
-              -e OPENVPN_PASSWORD=$PUREVPNPWD \
-              -e OPENVPN_OPTS=--inactive 3600 --ping 10 --ping-exit 60 \
-              --log-driver json-file \
-              --log-opt max-size=10m \
-              -p 9091:9091 \
-              docker-transmission-openvpn:armhf
-
-docker run --cap-add=NET_ADMIN --device=/dev/net/tun -d \
-			  -v /your/storage/path/:/data \
-              -v /etc/localtime:/etc/localtime:ro \
-              -e OPENVPN_PROVIDER=PIA \
-              -e OPENVPN_CONFIG=CA\ Toronto \
-              -e OPENVPN_USERNAME=user \
-              -e OPENVPN_PASSWORD=pass \
-              -e WEBPROXY_ENABLED=false \
-              -e LOCAL_NETWORK=192.168.0.0/16 \
-              --log-driver json-file \
-              --log-opt max-size=10m \
-              -p 9091:9091 \
-              haugene/transmission-openvpn
+  --dns 8.8.8.8 --dns 8.8.4.4 --restart='always' \
+  -v /media/HDD1000G/:/data \
+  -v /etc/localtime:/etc/localtime:ro \
+  -e OPENVPN_PROVIDER=PUREVPN \
+  -e OPENVPN_CONFIG=Netherlands1-tcp,Netherlands2-tcp,Norway-tcp,Sweden-tcp \
+  -e OPENVPN_USERNAME=$PUREVPNUSERNAME \
+  -e OPENVPN_PASSWORD=$PUREVPNPWD \
+  -e LOCAL_NETWORK=192.168.0.0/24 \
+  -e ENABLE_UFW=true \
+  -e OPENVPN_OPTS="--inactive 3601 --ping 10 --ping-exit 60" \
+  -e DROP_DEFAULT_ROUTE=true \
+  -e TRANSMISSION_DOWNLOAD_DIR="/data/Torrents-Downloads" \
+  -e TRANSMISSION_INCOMPLETE_DIR_ENABLED=false \
+  --log-driver json-file \
+  --log-opt max-size=10m \
+  -p 9092:9091 \
+  haugene/transmission-openvpn:dev-armhf
 
 
 
