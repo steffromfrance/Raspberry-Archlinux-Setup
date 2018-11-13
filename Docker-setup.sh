@@ -8,6 +8,10 @@
 docker container ls
 docker image ls
 
+#Adding current user to docker group to allow start of docker
+sudo groupadd docker
+sudo gpasswd -a $USER docker
+
 #Good stats to display about container
 docker stats --all --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}\t{{.NetIO}}"
 
