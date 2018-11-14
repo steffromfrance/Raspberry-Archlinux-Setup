@@ -78,11 +78,13 @@ docker run --name=transmission-ws --cap-add=NET_ADMIN --device=/dev/net/tun -d \
   -e OPENVPN_USERNAME=$WSVPNUSERNAME \
   -e OPENVPN_PASSWORD=$WSVPNPWD \
   -e LOCAL_NETWORK=192.168.0.0/24 \
-  -e ENABLE_UFW=true \
+  -e ENABLE_UFW=false \
   -e OPENVPN_OPTS="--inactive 3601 --ping 10 --ping-exit 60" \
   -e DROP_DEFAULT_ROUTE=true \
   -e TRANSMISSION_DOWNLOAD_DIR="/data/Torrents-Downloads" \
   -e TRANSMISSION_INCOMPLETE_DIR_ENABLED=false \
+  -e WEBPROXY_ENABLED=true \
+  -e WEBPROXY_PORT=8888 \
   --log-driver json-file \
   --log-opt max-size=10m \
   -p 9091:9091 \
@@ -99,7 +101,7 @@ docker run --name=transmission-ws --cap-add=NET_ADMIN --device=/dev/net/tun \
   -e OPENVPN_USERNAME=$WSVPNUSERNAME \
   -e OPENVPN_PASSWORD=$WSVPNPWD \
   -e LOCAL_NETWORK=192.168.0.0/24 \
-  -e ENABLE_UFW=true \
+  -e ENABLE_UFW=false \
   -e OPENVPN_OPTS="--inactive 3601 --ping 10 --ping-exit 60" \
   -e DROP_DEFAULT_ROUTE=true \
   -e TRANSMISSION_DOWNLOAD_DIR="/data/Torrents-Downloads" \
