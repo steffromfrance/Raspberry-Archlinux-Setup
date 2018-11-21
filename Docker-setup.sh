@@ -26,6 +26,12 @@ docker run --name portainer --restart=always -d -p 9000:9000 \
  -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data \
  portainer/portainer:arm
  
+#RPI Webcam : https://hub.docker.com/r/nieleyde/rpi-webcam/
+#Use the http request node to take a pic using this url:
+#http://<ipaddress>:8080/camera/snapshot
+#Use the http request node to retrieve the most recent camera shot using this url:
+#http://<ipaddress>:8080/pictures/image.jpg
+docker run -p 8080:8080 -d  --privileged nieleyde/rpi-webcam
 
 
 #Rpi Monitor : https://store.docker.com/community/images/neoraptor/rpi-monitor
