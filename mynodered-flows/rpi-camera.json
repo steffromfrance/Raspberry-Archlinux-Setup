@@ -1,0 +1,128 @@
+[
+    {
+        "id": "16b88cce.48472b",
+        "type": "tab",
+        "label": "FlowGetImage",
+        "disabled": false,
+        "info": "Flow to get image from a Pi Camera using an Docker container\nthat permit manipluating camera from http requests\n\n#RPI Webcam : https://hub.docker.com/r/nieleyde/rpi-webcam/\n#Use the http request node to take a pic using this url:\n#http://<ipaddress>:8080/camera/snapshot\n#Use the http request node to retrieve the most recent camera shot using this url:\n#http://<ipaddress>:8080/pictures/image.jpg"
+    },
+    {
+        "id": "62b1cc0a.ba45bc",
+        "type": "inject",
+        "z": "16b88cce.48472b",
+        "name": "Loop every 10 seconds",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "5f9aa52b.471744"
+            ]
+        ]
+    },
+    {
+        "id": "19d3ae82.feca79",
+        "type": "debug",
+        "z": "16b88cce.48472b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 700,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "5f9aa52b.471744",
+        "type": "http request",
+        "z": "16b88cce.48472b",
+        "name": "Take Picture",
+        "method": "GET",
+        "ret": "txt",
+        "url": "http://172.30.19.34/camera/snapshot.html",
+        "tls": "",
+        "x": 150,
+        "y": 160,
+        "wires": [
+            [
+                "56921a51.4a2524"
+            ]
+        ]
+    },
+    {
+        "id": "db873eca.335ee",
+        "type": "http request",
+        "z": "16b88cce.48472b",
+        "name": "GetPicture",
+        "method": "GET",
+        "ret": "bin",
+        "url": "http://172.30.19.34/pictures/image.jpg",
+        "tls": "",
+        "x": 150,
+        "y": 300,
+        "wires": [
+            [
+                "19d3ae82.feca79",
+                "cd2a1e38.c5208"
+            ]
+        ]
+    },
+    {
+        "id": "56921a51.4a2524",
+        "type": "delay",
+        "z": "16b88cce.48472b",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 140,
+        "y": 240,
+        "wires": [
+            [
+                "db873eca.335ee"
+            ]
+        ]
+    },
+    {
+        "id": "cd2a1e38.c5208",
+        "type": "file",
+        "z": "16b88cce.48472b",
+        "name": "",
+        "filename": "/tmp/current-snapshot.jpg",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "x": 430,
+        "y": 300,
+        "wires": [
+            [
+                "19d3ae82.feca79"
+            ]
+        ]
+    },
+    {
+        "id": "c1485510.683e28",
+        "type": "comment",
+        "z": "16b88cce.48472b",
+        "name": "GetCameraPictureFromHttp",
+        "info": "Get a Pi Camara Picture from HTTP WebSite exposing method",
+        "x": 400,
+        "y": 40,
+        "wires": []
+    }
+]
