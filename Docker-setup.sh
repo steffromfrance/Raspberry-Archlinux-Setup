@@ -26,6 +26,21 @@ docker run --name portainer --restart=always -d -p 9000:9000 \
  -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data \
  portainer/portainer:arm
  
+#OpenHab: https://store.docker.com/community/images/openhab/openhab
+docker volume create openhab_data
+docker volume inspect openhab_data
+docker run --name openhab --net=host \
+ -v /etc/localtime:/etc/localtime:ro \
+ -v /etc/timezone:/etc/timezone:ro \
+ -v openhab_addons:/openhab/addons \
+ -v openhab_conf:/openhab/conf \
+ -v openhab_userdata:/openhab/userdata \
+ -e "EXTRA_JAVA_OPTS=-Duser.timezone=Europe/Berlin" \
+ -d \
+ openhab/openhab:2.3.0-armhf-debian 
+ 
+ #openhab/openhab:2.3.0-amd64-debian
+ 
 #RPI Webcam : https://hub.docker.com/r/nieleyde/rpi-webcam/
 #Use the http request node to take a pic using this url:
 #http://<ipaddress>:8080/camera/snapshot
