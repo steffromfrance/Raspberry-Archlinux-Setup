@@ -1,7 +1,21 @@
 #! /bin/sh
 
+#Installing docker using the shell script
+# https://docs.docker.com/install/linux/docker-ce/debian/#install-using-the-convenience-script
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+usermod -aG docker your-user
+
+
+
 #-Installing Docker Hypriot Image to RPI
 #-http://blog.hypriot.com
+
+#Warning : for rpi0 at the date at 2018-11-28 
+#There is a bug in the new vesrion of docker with arm6
+# Need to downgrade until the issue is resolved
+# See : https://github.com/moby/moby/issues/38175#issuecomment-439733278
+sudo apt-get install docker-ce=18.06.1~ce~3-0~raspbian
 
 #-Setting up several usefull container
 #-More info at https://docs.docker.com/engine/reference/run/
@@ -26,19 +40,52 @@ docker run --name portainer --restart=always -d -p 9000:9000 \
  -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data \
  portainer/portainer:arm
  
+#WatchTower : https://hub.docker.com/r/v2tec/watchtower
+docker run -d --name watchtower --restart=always \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  v2tec/watchtower:armhf-latest
+
 #OpenHab: https://store.docker.com/community/images/openhab/openhab
-docker volume create openhab_data
-docker volume inspect openhab_data
-docker run --name openhab --net=host \
- -v /etc/localtime:/etc/localtime:ro \
- -v /etc/timezone:/etc/timezone:ro \
- -v openhab_addons:/openhab/addons \
- -v openhab_conf:/openhab/conf \
- -v openhab_userdata:/openhab/userdata \
- -e "EXTRA_JAVA_OPTS=-Duser.timezone=Europe/Berlin" \
- -d \
- openhab/openhab:2.3.0-armhf-debian 
- 
+#More detail on : https://www.openhab.org/docs/installation/docker.html
+sudo useradd -r -s /sbin/nologin openhab
+sudo usermod -a -G openhab pirate
+#Create the openHAB conf, userdata, and addon directories
+sudo mkdir /opt/openhab
+sudo mkdir /opt/openhab/conf
+sudo mkdir /opt/openhab/userdata
+sudo mkdir /opt/openhab/addons
+sudo chown -R openhab:openhab /opt/openhab
+docker container rm openhab && docker container rm openhab
+
+#Confirmed working at 2018-12-18
+docker run \
+        --name openhab \
+        --net=host \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /etc/timezone:/etc/timezone:ro \
+        -v openhab_addons:/openhab/addons \
+        -v openhab_conf:/openhab/conf \
+        -v openhab_userdata:/openhab/userdata \
+        -e "EXTRA_JAVA_OPTS=-Duser.timezone=Europe/Paris" \
+        -d --restart=always \
+        openhab/openhab:2.4.0-armhf-debian
+
+docker run \
+        --name openhab \
+        --net=host \
+        --tty \
+        -v /etc/localtime:/etc/localtime:ro \
+        -v /etc/timezone:/etc/timezone:ro \
+        -v /opt/openhab/conf:/openhab/conf \
+        -v /opt/openhab/userdata:/openhab/userdata \
+        -v /opt/openhab/addons:/openhab/addons\
+        -d \
+        -e USER_ID=999 \
+        -e GROUP_ID=998 \
+        -e "EXTRA_JAVA_OPTS=-Duser.timezone=Europe/Paris" \
+        --restart=always \
+        openhab/openhab:2.3.0-armhf-debian
+
  #openhab/openhab:2.3.0-amd64-debian
  
 #RPI Webcam : https://hub.docker.com/r/nieleyde/rpi-webcam/
@@ -67,8 +114,13 @@ docker run --name rpi2-samba -d \
 #TransmissionOpenVPN : https://github.com/haugene/docker-transmission-openvpn
 echo "PUREVPNUSERNAME=myvpnusername" >> /etc/environment
 echo "PUREVPNPWD=myvpnpwd" >> /etc/environment
-echo "WSVPNUSERNAME=myvpnusername" >> /etc/environment
-echo "WSVPNPWD=myvpnpwd" >> /etc/environment
+#echo "WSVPNUSERNAME=myvpnusername" >> /etc/environment
+#echo "WSVPNPWD=myvpnpwd" >> /etc/environment
+sudo echo "WSVPNUSERNAME=myvpnusername" >> /etc/environment
+sudo echo "WSVPNPWD=myvpnpwd" >> /etc/environment
+
+mkdir -p /media/HDD1000G/Torrents-Downloads
+chmod 766 
 
 docker container stop transmission && docker container rm transmission
 docker run --name=transmission --cap-add=NET_ADMIN --device=/dev/net/tun -d \
@@ -89,6 +141,7 @@ docker run --name=transmission --cap-add=NET_ADMIN --device=/dev/net/tun -d \
   --log-opt max-size=10m \
   -p 9091:9091 \
   haugene/transmission-openvpn:dev-armhf
+
 
 docker container stop transmission-ws && docker container rm transmission-ws
 docker run --name=transmission-ws --cap-add=NET_ADMIN --device=/dev/net/tun -d \
@@ -134,9 +187,5 @@ docker run --name=transmission-ws --cap-add=NET_ADMIN --device=/dev/net/tun \
   haugene/transmission-openvpn
 
 
+  Testing
 
-#-DuckDns
-#-https://store.docker.com/community/images/lsioarmhf/duckdns
-docker create --name=duckdns -e PGID=1000 -e PUID=1000  -e SUBDOMAINS=stef2017 \
-  -e TOKEN=<MY TOKEN> -e TZ=Europe/Paris   lsioarmhf/duckdns
-\

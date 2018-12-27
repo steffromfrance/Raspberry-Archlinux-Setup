@@ -1,0 +1,259 @@
+[
+    {
+        "id": "c57a9bb6.e71f4",
+        "type": "tab",
+        "label": "PiCamera",
+        "disabled": false,
+        "info": "Simple Flow to retrieve PiCam photo"
+    },
+    {
+        "id": "163027a7.bd4e5",
+        "type": "tab",
+        "label": "System Management",
+        "disabled": false,
+        "info": "Some usefull node for system management (reboot, shutdown...)"
+    },
+    {
+        "id": "86279e1.4311be",
+        "type": "http in",
+        "z": "c57a9bb6.e71f4",
+        "name": "",
+        "url": "/imagelow",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 144.74998474121094,
+        "y": 93,
+        "wires": [
+            [
+                "4ac94945.ad3ab8"
+            ]
+        ]
+    },
+    {
+        "id": "4ac94945.ad3ab8",
+        "type": "camerapi-takephoto",
+        "z": "c57a9bb6.e71f4",
+        "filemode": "0",
+        "filename": "",
+        "filedefpath": "1",
+        "filepath": "",
+        "fileformat": "jpeg",
+        "resolution": "2",
+        "rotation": "0",
+        "fliph": "0",
+        "flipv": "0",
+        "brightness": "50",
+        "contrast": "0",
+        "sharpness": "0",
+        "quality": "25",
+        "imageeffect": "none",
+        "exposuremode": "auto",
+        "iso": "0",
+        "agcwait": "1.0",
+        "led": "0",
+        "awb": "auto",
+        "name": "",
+        "x": 324.74998474121094,
+        "y": 99,
+        "wires": [
+            [
+                "6c204cb3.23d6dc"
+            ]
+        ]
+    },
+    {
+        "id": "6c204cb3.23d6dc",
+        "type": "http response",
+        "z": "c57a9bb6.e71f4",
+        "name": "",
+        "statusCode": "",
+        "headers": {
+            "content-type": "image/png"
+        },
+        "x": 485.39283752441406,
+        "y": 122.4285659790039,
+        "wires": []
+    },
+    {
+        "id": "c64efe2a.e09568",
+        "type": "http in",
+        "z": "c57a9bb6.e71f4",
+        "name": "",
+        "url": "/imagemedium",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 148.74998474121094,
+        "y": 156,
+        "wires": [
+            [
+                "877511a5.564568"
+            ]
+        ]
+    },
+    {
+        "id": "877511a5.564568",
+        "type": "camerapi-takephoto",
+        "z": "c57a9bb6.e71f4",
+        "filemode": "0",
+        "filename": "",
+        "filedefpath": "1",
+        "filepath": "",
+        "fileformat": "jpeg",
+        "resolution": "5",
+        "rotation": "0",
+        "fliph": "0",
+        "flipv": "0",
+        "brightness": "55",
+        "contrast": "0",
+        "sharpness": "0",
+        "quality": "25",
+        "imageeffect": "none",
+        "exposuremode": "auto",
+        "iso": "0",
+        "agcwait": "1.0",
+        "led": "0",
+        "awb": "auto",
+        "name": "",
+        "x": 332.74998474121094,
+        "y": 155,
+        "wires": [
+            [
+                "6c204cb3.23d6dc"
+            ]
+        ]
+    },
+    {
+        "id": "e8149b48.7728a8",
+        "type": "camerapi-takephoto",
+        "z": "c57a9bb6.e71f4",
+        "filemode": "0",
+        "filename": "",
+        "filedefpath": "1",
+        "filepath": "",
+        "fileformat": "jpeg",
+        "resolution": "8",
+        "rotation": "0",
+        "fliph": "0",
+        "flipv": "0",
+        "brightness": "55",
+        "contrast": "0",
+        "sharpness": "0",
+        "quality": "25",
+        "imageeffect": "none",
+        "exposuremode": "auto",
+        "iso": "0",
+        "agcwait": "1.0",
+        "led": "0",
+        "awb": "auto",
+        "name": "",
+        "x": 335.24998474121094,
+        "y": 211.25,
+        "wires": [
+            [
+                "6c204cb3.23d6dc"
+            ]
+        ]
+    },
+    {
+        "id": "4d8904bb.edfc0c",
+        "type": "http in",
+        "z": "c57a9bb6.e71f4",
+        "name": "",
+        "url": "/imagehigh",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 141.24998474121094,
+        "y": 213.5,
+        "wires": [
+            [
+                "e8149b48.7728a8"
+            ]
+        ]
+    },
+    {
+        "id": "bc27c511.ad3ea",
+        "type": "comment",
+        "z": "c57a9bb6.e71f4",
+        "name": "Flows to manage Camera from PI",
+        "info": "",
+        "x": 196.875,
+        "y": 33.75,
+        "wires": []
+    },
+    {
+        "id": "b80e3ea5.684cd",
+        "type": "http in",
+        "z": "163027a7.bd4e5",
+        "name": "",
+        "url": "/reboot",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 137,
+        "y": 100,
+        "wires": [
+            [
+                "1319fb71.95a895"
+            ]
+        ]
+    },
+    {
+        "id": "1319fb71.95a895",
+        "type": "exec",
+        "z": "163027a7.bd4e5",
+        "command": "sudo shutdown -r now",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Reboot Now",
+        "x": 404,
+        "y": 98.5,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "82660cd6.67285",
+        "type": "http in",
+        "z": "163027a7.bd4e5",
+        "name": "",
+        "url": "/shutdown",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 154,
+        "y": 174,
+        "wires": [
+            [
+                "1938fac5.5d577d"
+            ]
+        ]
+    },
+    {
+        "id": "1938fac5.5d577d",
+        "type": "exec",
+        "z": "163027a7.bd4e5",
+        "command": "sudo shutdown -h now",
+        "addpay": true,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "Shutdown Now",
+        "x": 420,
+        "y": 172.5,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    }
+]
+
