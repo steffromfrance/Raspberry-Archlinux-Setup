@@ -8,8 +8,9 @@ docker build . -f Dockerfile -t sstassin/docker-transmission-openvpn:debug
 #Pulling to docker hub
 
 
+
 docker images
-# testings 
+# testings on w window machine
 docker container stop transmission-ws && docker container rm transmission-ws
 docker run --name=transmission-ws --rm --cap-add=NET_ADMIN --device=/dev/net/tun \
   --dns 8.8.8.8 --dns 8.8.4.4 -rm\
