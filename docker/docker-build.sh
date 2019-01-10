@@ -12,8 +12,8 @@ docker build . -f Dockerfile -t sstassin/docker-transmission-openvpn:debug
 docker images
 # testings on w window machine
 docker container stop transmission-ws && docker container rm transmission-ws
-docker run --name=transmission-ws --rm --cap-add=NET_ADMIN --device=/dev/net/tun \
-  --dns 8.8.8.8 --dns 8.8.4.4 -rm\
+docker run --name=transmission-ws --cap-add=NET_ADMIN --device=/dev/net/tun \
+  --dns 8.8.8.8 --dns 8.8.4.4 \
   -v ~/transmission-docker-data/:/data \
   -v /etc/localtime:/etc/localtime:ro \
   -e OPENVPN_PROVIDER=WINDSCRIBE \
@@ -26,8 +26,9 @@ docker run --name=transmission-ws --rm --cap-add=NET_ADMIN --device=/dev/net/tun
   -e DROP_DEFAULT_ROUTE=true \
   -e TRANSMISSION_DOWNLOAD_DIR="/data/Torrents-Downloads" \
   -e TRANSMISSION_INCOMPLETE_DIR_ENABLED=false \
+  -e MONITORDNS_ENABLED=true \
   --log-driver json-file \
   --log-opt max-size=10m \
   -p 9091:9091 \
-  sstassin/docker-transmission-openvpn:debug
+  sstassin/docker-transmission-openvpn
 
