@@ -97,7 +97,7 @@ docker run --name=transmission --cap-add=NET_ADMIN --device=/dev/net/tun \
   -e DROP_DEFAULT_ROUTE=true \
   -e TRANSMISSION_DOWNLOAD_DIR="/data/Torrents-Downloads" \
   -e TRANSMISSION_INCOMPLETE_DIR_ENABLED=false \
-  -e TRANSMISSION_RATIO_LIMIT = 0.1 \
+  -e TRANSMISSION_RATIO_LIMIT=0.1 \
   --log-driver json-file \
   --log-opt max-size=10m \
   -p 9091:9091 \
