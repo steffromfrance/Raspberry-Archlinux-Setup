@@ -45,48 +45,6 @@ docker run -d --name watchtower --restart=always \
   -v /var/run/docker.sock:/var/run/docker.sock \
   v2tec/watchtower:armhf-latest
 
-#OpenHab: https://store.docker.com/community/images/openhab/openhab
-#More detail on : https://www.openhab.org/docs/installation/docker.html
-sudo useradd -r -s /sbin/nologin openhab
-sudo usermod -a -G openhab pirate
-#Create the openHAB conf, userdata, and addon directories
-sudo mkdir /opt/openhab
-sudo mkdir /opt/openhab/conf
-sudo mkdir /opt/openhab/userdata
-sudo mkdir /opt/openhab/addons
-sudo chown -R openhab:openhab /opt/openhab
-docker container rm openhab && docker container rm openhab
-
-#Confirmed working at 2018-12-18
-docker run \
-        --name openhab \
-        --net=host \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /etc/timezone:/etc/timezone:ro \
-        -v openhab_addons:/openhab/addons \
-        -v openhab_conf:/openhab/conf \
-        -v openhab_userdata:/openhab/userdata \
-        -e "EXTRA_JAVA_OPTS=-Duser.timezone=Europe/Paris" \
-        -d --restart=always \
-        openhab/openhab:2.4.0-armhf-debian
-
-docker run \
-        --name openhab \
-        --net=host \
-        --tty \
-        -v /etc/localtime:/etc/localtime:ro \
-        -v /etc/timezone:/etc/timezone:ro \
-        -v /opt/openhab/conf:/openhab/conf \
-        -v /opt/openhab/userdata:/openhab/userdata \
-        -v /opt/openhab/addons:/openhab/addons\
-        -d \
-        -e USER_ID=999 \
-        -e GROUP_ID=998 \
-        -e "EXTRA_JAVA_OPTS=-Duser.timezone=Europe/Paris" \
-        --restart=always \
-        openhab/openhab:2.3.0-armhf-debian
-
- #openhab/openhab:2.3.0-amd64-debian
  
 #RPI Webcam : https://hub.docker.com/r/nieleyde/rpi-webcam/
 #Use the http request node to take a pic using this url:
@@ -122,34 +80,15 @@ sudo echo "WSVPNPWD=myvpnpwd" >> /etc/environment
 mkdir -p /media/HDD1000G/Torrents-Downloads
 chmod 766 
 
+#using WIndscribe
 docker container stop transmission && docker container rm transmission
-docker run --name=transmission --cap-add=NET_ADMIN --device=/dev/net/tun -d \
-  --dns 8.8.8.8 --dns 8.8.4.4 --restart='always' \
-  -v /media/HDD1000G/:/data \
-  -v /etc/localtime:/etc/localtime:ro \
-  -e OPENVPN_PROVIDER=PUREVPN \
-  -e OPENVPN_CONFIG=Netherlands1-tcp,Netherlands2-tcp,Norway-tcp,Sweden-tcp \
-  -e OPENVPN_USERNAME=$PUREVPNUSERNAME \
-  -e OPENVPN_PASSWORD=$PUREVPNPWD \
-  -e LOCAL_NETWORK=192.168.0.0/24 \
-  -e ENABLE_UFW=false \
-  -e OPENVPN_OPTS="--inactive 3601 --ping 10 --ping-exit 60" \
-  -e DROP_DEFAULT_ROUTE=true \
-  -e TRANSMISSION_DOWNLOAD_DIR="/data/Torrents-Downloads" \
-  -e TRANSMISSION_INCOMPLETE_DIR_ENABLED=false \
-  --log-driver json-file \
-  --log-opt max-size=10m \
-  -p 9091:9091 \
-  haugene/transmission-openvpn:dev-armhf
-
-
-docker container stop transmission-ws && docker container rm transmission-ws
-docker run --name=transmission-ws --cap-add=NET_ADMIN --device=/dev/net/tun -d \
-  --dns 8.8.8.8 --dns 8.8.4.4 --restart='always' \
+docker pull haugene/transmission-openvpn:latest-armhf
+docker run --name=transmission --cap-add=NET_ADMIN --device=/dev/net/tun \
+  --dns 208.67.222.222 --dns 208.67.222.220 --restart='always' -d \
   -v /media/HDD1000G/:/data \
   -v /etc/localtime:/etc/localtime:ro \
   -e OPENVPN_PROVIDER=WINDSCRIBE \
-  -e OPENVPN_CONFIG=Netherlands-tcp,Norway-tcp,Sweden-tcp,Germany-tcp \
+  -e OPENVPN_CONFIG=Norway-udp \
   -e OPENVPN_USERNAME=$WSVPNUSERNAME \
   -e OPENVPN_PASSWORD=$WSVPNPWD \
   -e LOCAL_NETWORK=192.168.0.0/24 \
@@ -158,12 +97,12 @@ docker run --name=transmission-ws --cap-add=NET_ADMIN --device=/dev/net/tun -d \
   -e DROP_DEFAULT_ROUTE=true \
   -e TRANSMISSION_DOWNLOAD_DIR="/data/Torrents-Downloads" \
   -e TRANSMISSION_INCOMPLETE_DIR_ENABLED=false \
-  -e WEBPROXY_ENABLED=true \
-  -e WEBPROXY_PORT=8888 \
+  -e TRANSMISSION_RATIO_LIMIT = 0.1 \
   --log-driver json-file \
   --log-opt max-size=10m \
   -p 9091:9091 \
-  haugene/transmission-openvpn:dev-armhf
+  haugene/transmission-openvpn:latest-armhf
+
 
 #using on Ubuntu Stef 2 Laptop
 docker container stop transmission-ws && docker container rm transmission-ws
