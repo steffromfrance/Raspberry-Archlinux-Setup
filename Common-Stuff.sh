@@ -16,7 +16,10 @@ hdmi_mode=23
 sudo mount -o remount,ro /boot
 sudo reboot
 
-
+--Enabling the boot on usb on a RPI
+echo program_usb_boot_mode=1 | sudo tee -a /boot/config.txt
+This adds program_usb_boot_mode=1 to the end of /boot/config.txt. Reboot the Raspberry Pi with sudo reboot, then check that the OTP has $ vcgencmd otp_dump | grep 17:
+17:3020000a
 
 # Setting some user/password in a Environnement variable so it can be access by all scripts
 sudo nano /etc/environment
