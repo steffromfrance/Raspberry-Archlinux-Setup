@@ -21,6 +21,9 @@ echo program_usb_boot_mode=1 | sudo tee -a /boot/config.txt
 This adds program_usb_boot_mode=1 to the end of /boot/config.txt. Reboot the Raspberry Pi with sudo reboot, then check that the OTP has $ vcgencmd otp_dump | grep 17:
 17:3020000a
 
+--Disabling swapping on the swap
+sudo dphys-swapfile swapoff && sudo dphys-swapfile uninstall && sudo systemctl disable dphys-swapfile
+
 # Setting some user/password in a Environnement variable so it can be access by all scripts
 sudo nano /etc/environment
 ....
